@@ -1,0 +1,6 @@
+{
+    "data": "/data",
+    "binaries": "/data/binaries",
+    "schemas": "/schemas",
+    "node_pkg": "machina.core.models.nodes"
+}

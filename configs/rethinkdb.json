@@ -1,0 +1,6 @@
+{
+    "rethinkdb_host": "rethinkdb",
+    "rethinkdb_port": "28015",
+    "rethinkdb_user": "admin",
+    "rethinkdb_pass": "admin"
+}

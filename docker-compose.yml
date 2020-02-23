@@ -1,0 +1,196 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+#      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-rabbit heartbeat 0 log_levels [{connection,debug}]"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - machinanet
+
+  orientdb:
+    image: orientdb #:2.2.35 #orientdb
+    ports:
+      - 2424:2424
+      - 2480:2480
+    environment:
+      ORIENTDB_ROOT_PASSWORD: "root"
+    volumes:
+      - orientdb-data:/orientdb/databases
+    networks:
+      - machinanet
+
+  base-alpine3:
+    build: 
+      context: ./images/base
+      dockerfile: Dockerfile.alpine3
+      args:
+        - BRANCH=${BRANCH}
+    image: machina/base-alpine3
+    command: echo 'scaled'
+
+  base-ubuntu18:
+    build:
+      context: ./images/base
+      dockerfile: Dockerfile.ubuntu18
+      args:
+        - BRANCH=${BRANCH}
+    image: machina/base-ubuntu18
+    command: echo 'scaled'
+
+  identifier:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/identifier
+    image: machina/identifier
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/identifier/src/run.py"
+    networks:
+      - machinanet
+
+  zipanalyzer:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/zip
+    image: machina/analysis/zip
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/zip/src/run.py"
+    networks:
+      - machinanet
+
+  jaranalyzer:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/jar
+    image: machina/analysis/jar
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/jar/src/run.py"
+    networks:
+      - machinanet
+
+  androguardanalysis:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/androguard
+    image: machina/analysis/androguard
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/androguard/src/run.py"
+    networks:
+      - machinanet
+
+  findurls:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/findurls
+    image: machina/analysis/findurls
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/findurls/src/run.py"
+    networks:
+      - machinanet
+
+  exif:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/exif
+    image: machina/analysis/exif
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/exif/src/run.py"
+    networks:
+      - machinanet
+
+  gzip:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/gzip
+    image: machina/analysis/gzip
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/gzip/src/run.py"
+    networks:
+      - machinanet
+
+  tar:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/tar
+    image: machina/analysis/tar
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/tar/src/run.py"
+    networks:
+      - machinanet
+
+#  contenturianalysis:
+#    depends_on:
+#      - base-alpine3
+#    build:
+#      context: ./images/analysis/contenturianalysis
+#    image: machina/analysis/contenturianalysis
+#    volumes:
+#      - ./data:/data
+#      - ./configs:/configs
+#      - ./schemas:/schemas
+#      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon. Maybe in the future, this could be removed by having a pool of standby emulators in containers
+#    command:
+#      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+#        && python3 images/analysis/tar/src/run.py"
+#    networks:
+#      - machinanet
+
+
+volumes:
+  orientdb-data:
+
+networks:
+    machinanet:
+      driver: bridge

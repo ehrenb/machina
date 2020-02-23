@@ -1,0 +1,16 @@
+{
+    "type": "object",
+    "properties": {
+        "ts": {"type": "string"},
+        "hashes": {"type": "object",
+                   "properties" :{
+                        "md5": {"type": "string"},
+                        "sha256": {"type": "string"}
+                   },
+                   "required": ["md5", "sha256"]
+               },
+        "id": {"type": "string"},
+        "type": {"type": "string"}
+    },
+    "required": ["ts", "hashes", "id"]
+}

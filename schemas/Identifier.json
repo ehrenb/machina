@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "properties": {
+        "data": {"type": "string"},
+        "origin": {
+                      "type": "object",
+                      "properties": {
+                         "ts": {"type": "string"},
+                         "md5": {"type": "string"},
+                         "id": {"type":"string"},
+                         "type": {"type" :"string"}
+                   },
+                   "required": ["ts", "md5", "id", "type"]
+         },
+        "type": {"type": "string"}
+    },
+    "required": ["data"]
+}
