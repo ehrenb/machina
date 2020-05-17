@@ -120,6 +120,35 @@ services:
         && cd /tmp/machina && python3 setup.py install && cd /machina
         && python3 images/analysis/tar/src/run.py"
 
+  ssdeepanalysis:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/ssdeep/src/run.py"
+
+  similarityanalysis:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/similarity/src/run.py"
 
 #  contenturianalysis:
 #    volumes:

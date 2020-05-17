@@ -1,5 +1,9 @@
+import logging
 import pika
 import time
+
+logger = logging.getLogger(__name__)
+
 
 class BaseAPI(object):
     def __init__(self, 
@@ -20,8 +24,10 @@ class BaseAPI(object):
         attempt = 0
         while attempt < max_retries:
             try:
+                logger.info("Attempt {}/{} to connect to RabbitMQ at {}:{}".format(attempt, max_retries, rabbitmq_host, rabbitmq_port))
                 self.connection = pika.BlockingConnection(parameters)
                 break
-            except pika.exceptions.AMQPConnectionError:
+            except pika.exceptions.AMQPConnectionError as e:
+                logger.exception("Error connecting to RabbitMQ")
                 time.sleep(0.5)
                 attempt += 1

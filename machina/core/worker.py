@@ -40,6 +40,7 @@ from machina.core.models.nodes.url import URL
 # Relationships
 from machina.core.models.relationships.extracts import Extracts
 from machina.core.models.relationships.retypedto import RetypedTo
+from machina.core.models.relationships.similar import Similar
 
 class Worker(BaseAPI):
     """
@@ -205,9 +206,14 @@ class Worker(BaseAPI):
         """implement in subclass"""
         raise NotImplementedError
 
-    def publish(self, data, queues=next_queues):
-        """publish directly to a list of queues"""
+    def publish_next(self, data):
+        """publish to configured next_queues"""
+        self.publish(data, queues=self.next_queues)
+
+    def publish(self, data, queues):
+        """publish directly to a list of arbitrary queues"""
         for q in queues:
+            self.logger.info("publishing directly to {}".format(q))
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
                                   routing_key=q,
@@ -230,7 +236,8 @@ class Worker(BaseAPI):
         """resolve class given a resolved machina type (e.g. in types.json)"""
         all_models = Node.__subclasses__()
         for c in all_models:
-            if c.__name__.lower() == resolved_type.lower():
+            if c.element_type.lower() == resolved_type.lower():
+            # if c.__name__.lower() == resolved_type.lower():
                 return c
         return None
 
@@ -256,7 +263,7 @@ class Worker(BaseAPI):
                 attempts += 1
                 time.sleep(1)
 
-    def create_edge(self, relationship, origin_node_id, destination_node_id, max_retries=10):
+    def create_edge(self, relationship, origin_node_id, destination_node_id, data={}, max_retries=10):
         """
         wrap create_edge in retries, as advised by
         http://orientdb.com/docs/last/Concurrency.html
@@ -275,7 +282,7 @@ class Worker(BaseAPI):
                 # Re-resolve the vertices, because they may have become stale
                 origin_node = self.graph.get_vertex(origin_node_id)
                 destination_node = self.graph.get_vertex(destination_node_id)
-                edge = self.graph.create_edge(relationship, origin_node, destination_node)
+                edge = self.graph.create_edge(relationship, origin_node, destination_node, **data)
                 break
             except pyorient.exceptions.PyOrientCommandException:
                 self.logger.warn("Retrying create_edge attempt {}/{}".format(attempts, max_retries))

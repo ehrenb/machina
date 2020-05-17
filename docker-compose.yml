@@ -170,6 +170,38 @@ services:
     networks:
       - machinanet
 
+  ssdeepanalysis:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/ssdeep
+    image: machina/analysis/ssdeep
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/ssdeep/src/run.py"
+    networks:
+      - machinanet
+
+  similarityanalysis:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/ssdeep
+    image: machina/analysis/ssdeep
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/similarity/src/run.py"
+    networks:
+      - machinanet
+
 #  contenturianalysis:
 #    depends_on:
 #      - base-alpine3

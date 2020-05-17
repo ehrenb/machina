@@ -22,7 +22,9 @@ Entrypoint to the system - determines a type for the input data and tags it, tri
 ### module.py
 
 * Subclass the machina.core.worker.Worker class, this will ensure your worker module has connectivity to the Database, RabbitMQ, and configurations
-* Specify the Machina types (see configs/types.json) your worker module supports, or specify '*' for all
+* Specify any Machina types (see configs/types.json) your worker module supports, or specify '*' for all.  
+    * Each module will be bound to a RabbitMQ Queue that is named after the module's class name  
+    * Each machina type is a routing key to which the module's queue is bound to
 * Ensure that you import your worker module class into machina.core.worker module so that its schema gets automatically created in the database at startup
 
 #### types
@@ -49,14 +51,28 @@ Typically, since workers are handling data published by the Identifier, they inh
 
 ## Insertions
 
-Worker modules are not supposed to create new objects (e.g. files, binary data) in the database directly, only update elements or create edges (relationships).  They should publish any extracted data of interest to the Identifier queue so that it re-enters the pipeline, e.g.:
+Worker modules are not intended to create new objects (e.g. files, binary data) in the database directly, only update elements or create edges (relationships).  
+They should publish any extracted data of interest to the Identifier queue so that it re-enters the pipeline, e.g.:
 
 ```python
-channel.basic_publish(exchange='machina',
-                           routing_key='Identifier',
-                           body=json.dumps(body))
+class MyWorker(Worker):
+    next_queues = ['Identifier']
+    ...
+    
+    def callback(self, data, properties):
+        ...
+        self.publish_next(data) # publish to queues configured in 'next_queues'
 ``` 
+OR 
+```python
+class MyWorker(Worker):
+    ...
+    def callback(self, data, properties):
+        ...
+        self.publish(data, queues=['Identifier']) # publish to 'Identifier'
+```
 
+This workflow can also be used to invoke other modules directly, e.g. SSDeepAnalysis will compute ssdeep hashes for files, and invoke the SimilaryAnalysis module to do the comparison
 ## Updates
 
 When updating elements in the database, it is highly recommended to use the the Worker base class' update_node or create_edge functions.  These functions attempt to avoid updating a stale/out-of-date handle to a database element. 
@@ -117,7 +133,6 @@ channel.basic_publish(exchange='machina',
 
 ## Future modules
 
-* ssdeep (in identifier)
 * PCAP - Extract files, and ip+ports and create "entities"
  that can be used to link communications to other nodes (e.g. a dynamic analysis of binary b1 produces a pcap, which contains a hostname that is also found in another binary, b3. We can make a link that connects b1 and b2 via the hostname entity)
 * Images (PNG,JPEG) - steganography

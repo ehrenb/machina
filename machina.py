@@ -24,12 +24,14 @@ def submit(args):
                               body=data)
         channel.close()
 
-    for s in args.submissions:
+    num_submission = len(args.submissions)
+    for idx, s in enumerate(args.submissions):
         with open(s, 'rb') as f:
             data_encoded = base64.b64encode(f.read()).decode()
             data = {'data': data_encoded}
             data = json.dumps(data)
             submit_job(data, channel)
+            logger.info("Submitted {}/{}".format(idx+1, num_submission))
 #-------------------------------------------------------------------------------
 if __name__ == '__main__':
     #-------------------------------------------------------------------------------

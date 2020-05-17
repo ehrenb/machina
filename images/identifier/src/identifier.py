@@ -108,10 +108,10 @@ class Identifier(Worker):
                 'type': resolved_type}
 
         if supported_type:
-            # Create DB entry
+            # Create DB entry with the supported Node type
 
             # Dynamic class resolution for Machina type -> OrientDB Node class
-            # These are coupled tightly, a Node class is named the same as a type
+            # These are coupled tightly, a Node class' element_type attribute is named the same as a type
             # and the search ignores case
             c = self.resolve_db_node_cls(resolved_type)
             node = c.objects.create(md5=body['hashes']['md5'],
@@ -120,6 +120,7 @@ class Identifier(Worker):
                                     ts=ts_db,
                                     type=resolved_type)
         else:
+            # Create a generic entry (Artifact)
             node = self.graph.artifacts.create(md5=body['hashes']['md5'],
                                                sha256=body['hashes']['sha256'],
                                                size=size,
@@ -130,13 +131,15 @@ class Identifier(Worker):
 
         # If specified, link to another run's artifact
         # This is useful during the retyping process
+        # Or to assert a link manually
         origin_node = None
         if 'origin' in data.keys():
             # Retrieve the originating Node cls from the database
              origin_node = self.graph.get_vertex(data['origin']['id'])
 
-        # If the originating hash matches the given hash
-        # this is a retype, otherwise its an extraction
+        # If the resolved originating hash matches the given hash
+        # this is a retype of a previous Node.
+        # If no match, it's an extraction
         if origin_node:
             if origin_node.md5 == body['hashes']['md5']:
                 # create relationship (retype) btwn a and origin_a

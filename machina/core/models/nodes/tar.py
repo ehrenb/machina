@@ -12,3 +12,4 @@ class Tar(Node):
     size = Long(nullable=False)
     ts = DateTime(nullable=False)
     type = String(nullable=False)
+    ssdeep = String(nullable=True)

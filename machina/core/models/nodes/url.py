@@ -8,3 +8,5 @@ class URL(Node):
 
     # URL Attribute
     url = String()
+
+    ssdeep = String(nullable=True)

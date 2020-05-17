@@ -8,6 +8,7 @@ from machina.core.worker import Worker
 
 class AndroguardAnalysis(Worker):
     types = ['apk']
+    next_queues = ['Identifier']
     
     def __init__(self, *args, **kwargs):
         super(AndroguardAnalysis, self).__init__(*args, **kwargs)
@@ -87,16 +88,17 @@ class AndroguardAnalysis(Worker):
         for f in files:
             fdata = a.get_file(f)
             data_encoded = base64.b64encode(fdata).decode()
-            body = {
+            body = json.dumps({
                     "data": data_encoded,
                     "origin": {
                         "ts": data['ts'],
                         "md5": data['hashes']['md5'],
                         "id": data['id'], #I think this is the only field needed, we can grab the unique node based on id alone
                         "type": data['type']}
-                    }
+                    })
 
-            channel = self.get_channel(self.config['rabbitmq'])
-            channel.basic_publish(exchange='machina',
-                                       routing_key='Identifier',
-                                       body=json.dumps(body))
+            # channel = self.get_channel(self.config['rabbitmq'])
+            # channel.basic_publish(exchange='machina',
+            #                            routing_key='Identifier',
+            #                            body=json.dumps(body))
+            self.publish_next(body)
