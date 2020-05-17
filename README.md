@@ -77,6 +77,12 @@ Production environment (need to git push and rebuild after changes):
 docker-compose -f docker-compose.yml up -d 
 ```
 
+Scaling workers:
+
+```bash
+docker-compose scale identifier=2 androguardanalysis=5
+```
+
 ## Use client
 
 ```
