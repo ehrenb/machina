@@ -1,6 +1,7 @@
 FROM machina/base-alpine3
 
-RUN apk add --no-cache libmagic
+RUN apk update && \
+    apk add --no-cache libmagic tiff-dev jpeg-dev openjpeg-dev zlib-dev
 
 # Install ADB
 RUN apk --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ add android-tools

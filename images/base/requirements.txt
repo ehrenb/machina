@@ -1,4 +1,4 @@
 jsonschema
 pika
-remodel
 -e git+https://github.com/alanmeeson/pyorient.git@0317a87369675df9b33fd38af451099c3c011d40#egg=pyorient
+# -e git+https://github.com/brucetony/pyorient.git@ec328f2b4f51664819e48895b86f8912d22415a6#egg=pyorient

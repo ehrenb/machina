@@ -100,11 +100,18 @@ Or, to assert a type (must be available in the 'available_types' configuration w
 
 ```json
 {
-  "data": "<64encoded_data",
+  "data": "<64encoded_data>",
   "type": "apk"
 }
 ```
 
+## Cleanup
+
+Delete the database (WARNING: this will delete all of your data!)
+
+```bash
+docker volume rm machina_orientdb-data
+```
 
 ## Module development
 

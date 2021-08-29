@@ -45,7 +45,7 @@ RUN rm /tmp/requirements.txt
 
 ARG BRANCH
 ENV BRANCH $BRANCH
-RUN git clone --branch ${BRANCH} git@github.com:ehrenb/machina.git /machina
+RUN git clone --branch ${BRANCH} https://github.com/ehrenb/machina.git /machina
 
 # cleanup ssh keys
 RUN rm -rf /root/.ssh/
