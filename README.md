@@ -16,6 +16,11 @@ Machina uses RabbitMQ as a queueing system to support binary submission and scal
 
 To assign an abstract type to data submitted to the pipeline, the Identifier Worker Module attempts to discover the type of data submitted (e.g. mime-type, magic header, or manual assertion).  A couple of examples of analyses visualized in the backend's (OrientDB) graph editor:
 
+## Administration
+
+* OrientDB GUI: http://127.0.0.1:2480
+  - username: root, password: root
+
 Recursive APK Analysis:
 ![APK1](docs/machina_apk_screenshot.png)
 
