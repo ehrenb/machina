@@ -1,6 +1,6 @@
-FROM machina/base-alpine3
+FROM machina/base-alpine
 
-RUN apk add --no-cache libmagic
+RUN apk --update add --no-cache libmagic
 
 COPY requirements.txt /tmp/
 RUN pip3 install --trusted-host pypi.org \

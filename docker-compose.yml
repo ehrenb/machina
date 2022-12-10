@@ -24,27 +24,27 @@ services:
     networks:
       - machinanet
 
-  base-alpine3:
+  base-alpine:
     build: 
       context: ./images/base
-      dockerfile: Dockerfile.alpine3
+      dockerfile: Dockerfile.alpine
       args:
         - BRANCH=${BRANCH}
-    image: machina/base-alpine3
+    image: machina/base-alpine
     command: echo 'scaled'
 
-  base-ubuntu18:
+  base-ubuntu:
     build:
       context: ./images/base
-      dockerfile: Dockerfile.ubuntu18
+      dockerfile: Dockerfile.ubuntu
       args:
         - BRANCH=${BRANCH}
-    image: machina/base-ubuntu18
+    image: machina/base-ubuntu
     command: echo 'scaled'
 
   identifier:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build:
       context: ./images/identifier
     image: machina/identifier
@@ -60,7 +60,7 @@ services:
 
   zipanalyzer:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build: 
       context: ./images/analysis/zip
     image: machina/analysis/zip
@@ -76,7 +76,7 @@ services:
 
   jaranalyzer:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build: 
       context: ./images/analysis/jar
     image: machina/analysis/jar
@@ -92,7 +92,7 @@ services:
 
   androguardanalysis:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build: 
       context: ./images/analysis/androguard
     image: machina/analysis/androguard
@@ -108,7 +108,7 @@ services:
 
   findurls:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build: 
       context: ./images/analysis/findurls
     image: machina/analysis/findurls
@@ -124,7 +124,7 @@ services:
 
   exif:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build:
       context: ./images/analysis/exif
     image: machina/analysis/exif
@@ -140,7 +140,7 @@ services:
 
   gzip:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build:
       context: ./images/analysis/gzip
     image: machina/analysis/gzip
@@ -156,7 +156,7 @@ services:
 
   tar:
     depends_on:
-      - base-alpine3
+      - base-alpine
     build:
       context: ./images/analysis/tar
     image: machina/analysis/tar
@@ -172,7 +172,7 @@ services:
 
   ssdeepanalysis:
     depends_on:
-      - base-ubuntu18
+      - base-ubuntu
     build:
       context: ./images/analysis/ssdeep
     image: machina/analysis/ssdeep
@@ -188,7 +188,7 @@ services:
 
   similarityanalysis:
     depends_on:
-      - base-ubuntu18
+      - base-ubuntu
     build:
       context: ./images/analysis/ssdeep
     image: machina/analysis/ssdeep
@@ -204,7 +204,7 @@ services:
 
 #  contenturianalysis:
 #    depends_on:
-#      - base-alpine3
+#      - base-alpine
 #    build:
 #      context: ./images/analysis/contenturianalysis
 #    image: machina/analysis/contenturianalysis

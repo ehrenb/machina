@@ -1,4 +1,4 @@
-FROM machina/base-ubuntu18
+FROM machina/base-ubuntu
 
 # Install ssdeep library
 # RUN cd /tmp && \
