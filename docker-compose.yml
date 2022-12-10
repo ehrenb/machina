@@ -42,165 +42,165 @@ services:
     image: machina/base-ubuntu18
     command: echo 'scaled'
 
-  # identifier:
-  #   depends_on:
-  #     - base-alpine3
-  #   build:
-  #     context: ./images/identifier
-  #   image: machina/identifier
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/identifier/src/run.py"
-  #   networks:
-  #     - machinanet
+  identifier:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/identifier
+    image: machina/identifier
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/identifier/src/run.py"
+    networks:
+      - machinanet
 
-  # zipanalyzer:
-  #   depends_on:
-  #     - base-alpine3
-  #   build: 
-  #     context: ./images/analysis/zip
-  #   image: machina/analysis/zip
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/zip/src/run.py"
-  #   networks:
-  #     - machinanet
+  zipanalyzer:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/zip
+    image: machina/analysis/zip
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/zip/src/run.py"
+    networks:
+      - machinanet
 
-  # jaranalyzer:
-  #   depends_on:
-  #     - base-alpine3
-  #   build: 
-  #     context: ./images/analysis/jar
-  #   image: machina/analysis/jar
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/jar/src/run.py"
-  #   networks:
-  #     - machinanet
+  jaranalyzer:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/jar
+    image: machina/analysis/jar
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/jar/src/run.py"
+    networks:
+      - machinanet
 
-  # androguardanalysis:
-  #   depends_on:
-  #     - base-alpine3
-  #   build: 
-  #     context: ./images/analysis/androguard
-  #   image: machina/analysis/androguard
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/androguard/src/run.py"
-  #   networks:
-  #     - machinanet
+  androguardanalysis:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/androguard
+    image: machina/analysis/androguard
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/androguard/src/run.py"
+    networks:
+      - machinanet
 
-  # findurls:
-  #   depends_on:
-  #     - base-alpine3
-  #   build: 
-  #     context: ./images/analysis/findurls
-  #   image: machina/analysis/findurls
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/findurls/src/run.py"
-  #   networks:
-  #     - machinanet
+  findurls:
+    depends_on:
+      - base-alpine3
+    build: 
+      context: ./images/analysis/findurls
+    image: machina/analysis/findurls
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/findurls/src/run.py"
+    networks:
+      - machinanet
 
-  # exif:
-  #   depends_on:
-  #     - base-alpine3
-  #   build:
-  #     context: ./images/analysis/exif
-  #   image: machina/analysis/exif
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/exif/src/run.py"
-  #   networks:
-  #     - machinanet
+  exif:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/exif
+    image: machina/analysis/exif
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/exif/src/run.py"
+    networks:
+      - machinanet
 
-  # gzip:
-  #   depends_on:
-  #     - base-alpine3
-  #   build:
-  #     context: ./images/analysis/gzip
-  #   image: machina/analysis/gzip
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/gzip/src/run.py"
-  #   networks:
-  #     - machinanet
+  gzip:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/gzip
+    image: machina/analysis/gzip
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/gzip/src/run.py"
+    networks:
+      - machinanet
 
-  # tar:
-  #   depends_on:
-  #     - base-alpine3
-  #   build:
-  #     context: ./images/analysis/tar
-  #   image: machina/analysis/tar
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/tar/src/run.py"
-  #   networks:
-  #     - machinanet
+  tar:
+    depends_on:
+      - base-alpine3
+    build:
+      context: ./images/analysis/tar
+    image: machina/analysis/tar
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/tar/src/run.py"
+    networks:
+      - machinanet
 
-  # ssdeepanalysis:
-  #   depends_on:
-  #     - base-ubuntu18
-  #   build:
-  #     context: ./images/analysis/ssdeep
-  #   image: machina/analysis/ssdeep
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/ssdeep/src/run.py"
-  #   networks:
-  #     - machinanet
+  ssdeepanalysis:
+    depends_on:
+      - base-ubuntu18
+    build:
+      context: ./images/analysis/ssdeep
+    image: machina/analysis/ssdeep
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/ssdeep/src/run.py"
+    networks:
+      - machinanet
 
-  # similarityanalysis:
-  #   depends_on:
-  #     - base-ubuntu18
-  #   build:
-  #     context: ./images/analysis/ssdeep
-  #   image: machina/analysis/ssdeep
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #     - ./schemas:/schemas
-  #   command:
-  #     bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-  #       && python3 images/analysis/similarity/src/run.py"
-  #   networks:
-  #     - machinanet
+  similarityanalysis:
+    depends_on:
+      - base-ubuntu18
+    build:
+      context: ./images/analysis/ssdeep
+    image: machina/analysis/ssdeep
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 images/analysis/similarity/src/run.py"
+    networks:
+      - machinanet
 
 #  contenturianalysis:
 #    depends_on:
