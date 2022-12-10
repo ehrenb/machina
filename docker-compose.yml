@@ -172,7 +172,7 @@ services:
 
   ssdeepanalysis:
     depends_on:
-      - base-alpine3
+      - base-ubuntu18
     build:
       context: ./images/analysis/ssdeep
     image: machina/analysis/ssdeep
@@ -188,7 +188,7 @@ services:
 
   similarityanalysis:
     depends_on:
-      - base-alpine3
+      - base-ubuntu18
     build:
       context: ./images/analysis/ssdeep
     image: machina/analysis/ssdeep
