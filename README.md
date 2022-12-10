@@ -55,14 +55,13 @@ python setup.py install
 ## Services installation
 
 * [Install Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-* [Install Docker Compose](https://docs.docker.com/compose/install/)
 
 Build the services:
 
 * This will build from the branch defined in .env, if you want to change the branch that Machina will be built from, edit the the top-level .env file
 
 ```
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 ## Run and daemonize services
