@@ -1,0 +1,168 @@
+version: '3'
+services:
+  identifier:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/identifier/src/run.py"
+
+  zipanalyzer:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/zip/src/run.py"
+
+  jaranalyzer:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/jar/src/run.py"
+
+  androguardanalysis:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/androguard/src/run.py"
+
+  findurls:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/findurls/src/run.py"
+
+  exif:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/exif/src/run.py"
+
+  gzip:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/gzip/src/run.py"
+
+  tar:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/tar/src/run.py"
+
+  ssdeepanalysis:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/ssdeep/src/run.py"
+
+  similarityanalysis:
+    volumes:
+      - $PWD:/machina
+      - ./data:/data
+      - ./configs:/configs
+      - ./schemas:/schemas
+    command:
+      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+        && mkdir /tmp/machina
+        && cp -r /machina/setup.py /tmp/machina
+        && cp -r /machina/images /tmp/machina
+        && cp -r /machina/machina /tmp/machina
+        && cd /tmp/machina && python3 setup.py install && cd /machina
+        && python3 images/analysis/similarity/src/run.py"
+
+#  contenturianalysis:
+#    volumes:
+#      - $PWD:/machina
+#      - ./data:/data
+#      - ./configs:/configs
+#      - ./schemas:/schemas
+#      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon, maybe in the future, this could be removed by having a pool of standby emulators in containers
+#    command:
+#      sh -c "./wait-for-it.sh rabbitmq:5672 -t 60 -- ./wait-for-it.sh orientdb:2424 -t 60
+#        && mkdir /tmp/machina
+#        && cp -r /machina/setup.py /tmp/machina
+#        && cp -r /machina/images /tmp/machina
+#        && cp -r /machina/machina /tmp/machina
+#        && cd /tmp/machina && python3 setup.py install && cd /machina
+#        && python3 images/analysis/contenturianalysis/src/run.py"
+
