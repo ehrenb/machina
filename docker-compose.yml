@@ -54,7 +54,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/identifier/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -70,7 +70,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/zip/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -86,7 +86,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/jar/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -102,7 +102,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/androguard/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -118,7 +118,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/findurls/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -134,7 +134,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/exif/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -150,7 +150,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/gzip/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -166,7 +166,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/tar/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -182,7 +182,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/ssdeep/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 
@@ -198,7 +198,7 @@ services:
       - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-        && python3 images/analysis/similarity/src/run.py"
+        && python3 src/run.py"
     networks:
       - machinanet
 

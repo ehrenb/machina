@@ -38,7 +38,7 @@ class JarAnalyzer(Worker):
 
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
-                                       routing_key='Identifier',
-                                       body=json.dumps(body))
+                                    routing_key='Identifier',
+                                    body=json.dumps(body))
         else:
             pass

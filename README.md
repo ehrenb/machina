@@ -61,37 +61,28 @@ Build the services:
 * This will build from the branch defined in .env, if you want to change the branch that Machina will be built from, edit the the top-level .env file
 
 ```
-docker compose build --no-cache
+docker compose build
 ```
 
 ## Run and daemonize services
 
-Development environment 
-* local code is mounted in and reinstalled at container uptime, no need to rebuild after each code change
-
-This runs the docker-compose.override.yml, which overrides the base configuration docker-compose.yml:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-Production environment (need to git push and rebuild after changes):
-
-```bash
-docker-compose -f docker-compose.yml up -d 
-```
 
 Scaling workers:
 
 ```bash
-docker-compose scale identifier=2 androguardanalysis=5
+docker compose scale identifier=2 androguardanalysis=5
 ```
 
 ## Use client
 
 ```
-./machina --help
-./machina submit <filepath>
+./bin/machina.py --help
+./bin/machina.py submit <filepath>
 ```
 
 Optionally, you can publish your own message to the RabbitMQ Server, with the routing key set to 'Identifier' and a JSON body like the following:
