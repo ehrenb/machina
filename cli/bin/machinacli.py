@@ -6,17 +6,22 @@ import json
 import logging
 import sys
 
-from machina.core.api import BaseAPI
+import pika
 
 #-------------------------------------------------------------------------------
 # CLI Functions
 def submit(args):
-    api = BaseAPI(rabbitmq_host=args.rabbitmq_host,
-        rabbitmq_port=int(args.rabbitmq_port),
-        rabbitmq_user=args.rabbitmq_user,
-        rabbitmq_password=args.rabbitmq_password,
-        rabbitmq_heartbeat=args.rabbitmq_heartbeat)
-    channel = api.connection.channel()
+
+    credentials = pika.PlainCredentials(args.rabbitmq_user, args.rabbitmq_password)
+    parameters = pika.ConnectionParameters(
+        args.rabbitmq_host,
+        args.rabbitmq_port,
+        '/',
+        credentials,
+        heartbeat=args.rabbitmq_heartbeat,
+        socket_timeout=2)
+    connection = pika.BlockingConnection(parameters)
+    channel = connection.channel()
 
     def submit_job(data, channel):
         channel.basic_publish(exchange='',
@@ -44,12 +49,12 @@ if __name__ == '__main__':
     # submit
     submit_parser = subparser.add_parser('submit', help='submit a file')
     submit_parser.add_argument('submissions', nargs='+',
-                    help='a list of APK files or package names to submit')
+        help='a list of APK files or package names to submit')
     submit_parser.add_argument('--rabbitmq-host', help='rabbitmq host', default='127.0.0.1')
-    submit_parser.add_argument('--rabbitmq-port', help='rabbitmq port', default='5672')
+    submit_parser.add_argument('--rabbitmq-port', help='rabbitmq port', type=int, default=5672)
     submit_parser.add_argument('--rabbitmq-user', help='rabbitmq user', default='rabbitmq')
     submit_parser.add_argument('--rabbitmq-password', help='rabbitmq password', default='rabbitmq')
-    submit_parser.add_argument('--rabbitmq-heartbeat', help='rabbitmq heartbeat time', default='600')
+    submit_parser.add_argument('--rabbitmq-heartbeat', help='rabbitmq heartbeat time', type=int, default=600)
     submit_parser.set_defaults(func=submit)
     #-------------------------------------------------------------------------------
 
