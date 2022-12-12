@@ -13,7 +13,7 @@ services:
       - machinanet
 
   orientdb:
-    image: orientdb:2.2
+    image: orientdb:3.2 #orientdb:2.2
     ports:
       - 2424:2424
       - 2480:2480

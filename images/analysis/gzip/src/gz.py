@@ -17,7 +17,7 @@ class Gz(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         with gzip.open(target, 'rb') as f:
             data_encoded = base64.b64encode(f.read()).decode()
@@ -32,5 +32,5 @@ class Gz(Worker):
 
         channel = self.get_channel(self.config['rabbitmq'])
         channel.basic_publish(exchange='machina',
-                                   routing_key='Identifier',
-                                   body=json.dumps(body))
+            routing_key='Identifier',
+            body=json.dumps(body))

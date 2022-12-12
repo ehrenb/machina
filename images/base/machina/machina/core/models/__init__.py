@@ -8,7 +8,7 @@ Node = declarative_node()
 Relationship = declarative_relationship()
 
 def init_orientdb(host, port, name, user, password):
-    orientdb_url = '{}:{}/{}'.format(host, port, name)
+    orientdb_url = f'{host}:{port}/{name}'
     conf = Config.from_url(orientdb_url, user, password)
 
     # g = Graph(conf)

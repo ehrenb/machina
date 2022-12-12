@@ -17,7 +17,7 @@ class Tar(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         tar = tarfile.open(target, "r")
         for member in tar.getmembers():
@@ -37,5 +37,5 @@ class Tar(Worker):
 
                 channel = self.get_channel(self.config['rabbitmq'])
                 channel.basic_publish(exchange='machina',
-                                      routing_key='Identifier',
-                                      body=json.dumps(body))
+                    routing_key='Identifier',
+                    body=json.dumps(body))

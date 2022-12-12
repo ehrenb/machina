@@ -12,16 +12,16 @@ from machina.core.api import BaseAPI
 # CLI Functions
 def submit(args):
     api = BaseAPI(rabbitmq_host=args.rabbitmq_host,
-                  rabbitmq_port=int(args.rabbitmq_port),
-                  rabbitmq_user=args.rabbitmq_user,
-                  rabbitmq_password=args.rabbitmq_password,
-                  rabbitmq_heartbeat=args.rabbitmq_heartbeat)
+        rabbitmq_port=int(args.rabbitmq_port),
+        rabbitmq_user=args.rabbitmq_user,
+        rabbitmq_password=args.rabbitmq_password,
+        rabbitmq_heartbeat=args.rabbitmq_heartbeat)
     channel = api.connection.channel()
 
     def submit_job(data, channel):
         channel.basic_publish(exchange='',
-                              routing_key='Identifier',
-                              body=data)
+            routing_key='Identifier',
+            body=data)
         channel.close()
 
     num_submission = len(args.submissions)
@@ -31,7 +31,7 @@ def submit(args):
             data = {'data': data_encoded}
             data = json.dumps(data)
             submit_job(data, channel)
-            logger.info("Submitted {}/{}".format(idx+1, num_submission))
+            logger.info(f"Submitted {idx+1}/{num_submission}")
 #-------------------------------------------------------------------------------
 if __name__ == '__main__':
     #-------------------------------------------------------------------------------

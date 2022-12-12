@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from pprint import pformat
 import threading
 import time
 
@@ -59,27 +60,23 @@ class Worker(BaseAPI):
         self.config = self._load_configs()
         self.schema = self._load_schema()
 
-        self.logger.info("Validating types: {}".format(self.types))
+        self.logger.info(f"Validating types: {pformat(self.types)}")
         types_valid, t = self._types_valid()
         if not types_valid:
-            self.logger.error("{} is not configured as a type in types.json".format(t))
+            self.logger.error(f"{t} is not configured as a type in types.json")
             raise Exception
 
         # RabbitMQ Connection info
         self.api = BaseAPI(**self.config['rabbitmq'])
 
         # OrientDB Connection
-        self.logger.info("OrientDB cfg: {} {} {} {} {}".format(self.config['orientdb']['orientdb_host'],
-                                                             self.config['orientdb']['orientdb_port'],
-                                                             self.config['orientdb']['orientdb_user'],
-                                                             self.config['orientdb']['orientdb_pass'],
-                                                             self.config['orientdb']['orientdb_name']))
+        self.logger.debug(f"OrientDB cfg: {pformat(self.config['orientdb'])}")
         # Init the database
         self.graph = init_orientdb(host=self.config['orientdb']['orientdb_host'],
-                                   port=self.config['orientdb']['orientdb_port'],
-                                   name=self.config['orientdb']['orientdb_name'],
-                                   user=self.config['orientdb']['orientdb_user'],
-                                   password=self.config['orientdb']['orientdb_pass'])
+            port=self.config['orientdb']['orientdb_port'],
+            name=self.config['orientdb']['orientdb_name'],
+            user=self.config['orientdb']['orientdb_user'],
+            password=self.config['orientdb']['orientdb_pass'])
 
         self.channel = self.api.connection.channel()
 
@@ -90,7 +87,7 @@ class Worker(BaseAPI):
         self.channel.exchange_declare('machina')
 
         # Initialize direct queue w/ subclass name
-        self.logger.info("Binding to direct queue: {}".format(bind_queue))
+        self.logger.info(f"Binding to direct queue: {bind_queue}")
         self.channel.queue_declare(self.cls_name, durable=True)
 
         # Ensure that the worker's queue is bound to the exchange
@@ -109,7 +106,7 @@ class Worker(BaseAPI):
 
         self.channel.basic_qos(prefetch_count=1)
         self.channel.basic_consume(self.cls_name,
-                                   on_message_callback=self._callback)
+            on_message_callback=self._callback)
 
     #############################################################
     # Privates
@@ -178,7 +175,7 @@ class Worker(BaseAPI):
         # fixed resolver to ensure base schema uri is resolved
         # e.g. https://stackoverflow.com/questions/53968770/how-to-set-up-local-file-references-in-python-jsonschema-document
         # resolver = jsonschema.RefResolver('file://{}'.format(os.path.join(self.config['paths']['schemas'], 'binary.json')), self.schema)
-        resolver = jsonschema.RefResolver('file:{}'.format(os.path.join(self.config['paths']['schemas'], self.cls_name+'.json')), self.schema)
+        resolver = jsonschema.RefResolver(f"file:{os.path.join(self.config['paths']['schemas'], self.cls_name+'.json')}", self.schema)
 
         jsonschema.validate(instance=data, schema=self.schema, resolver=resolver)
 
@@ -194,7 +191,7 @@ class Worker(BaseAPI):
     # RabbitMQ Helpers
     def start_consuming(self):
         """start consuming"""
-        self.logger.info('{} worker started'.format(self.cls_name))
+        self.logger.info(f'{self.cls_name} worker started')
         try:
             self.channel.start_consuming()
         except Exception as e:
@@ -213,11 +210,11 @@ class Worker(BaseAPI):
     def publish(self, data, queues):
         """publish directly to a list of arbitrary queues"""
         for q in queues:
-            self.logger.info("publishing directly to {}".format(q))
+            self.logger.info(f"publishing directly to {q}")
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
-                                  routing_key=q,
-                                  body=data)
+                routing_key=q,
+                body=data)
             channel.close()
 
     def get_channel(self, config):
@@ -259,7 +256,7 @@ class Worker(BaseAPI):
                 node.save()
                 break
             except pyorient.exceptions.PyOrientCommandException:
-                self.logger.warn("Retrying update_node attempt {}/{}".format(attempts, max_retries))
+                self.logger.warn(f"Retrying update_node attempt {attempts}/{max_retries}")
                 attempts += 1
                 time.sleep(1)
 
@@ -285,7 +282,7 @@ class Worker(BaseAPI):
                 edge = self.graph.create_edge(relationship, origin_node, destination_node, **data)
                 break
             except pyorient.exceptions.PyOrientCommandException:
-                self.logger.warn("Retrying create_edge attempt {}/{}".format(attempts, max_retries))
+                self.logger.warn(f"Retrying create_edge attempt {attempts}/{max_retries}")
                 attempts += 1
                 time.sleep(1)
         return edge

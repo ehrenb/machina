@@ -22,13 +22,13 @@ class ContentURIAnalysis(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         client = docker.DockerClient(base_url='unix://var/run/docker.sock')
-        self.logger.info("client version: {}".format(client.version()))
+        self.logger.info(f"client version: {client.version()}")
 
         images = client.images.list("docker-registry-url/agoda/docker-emulator-android-*")
-        self.logger.info("images: {}".format(images))
+        self.logger.info(f"images: {images}")
 
         # Map SDK version to the image name for easier lookup
         image_to_sdk = {}
@@ -54,9 +54,9 @@ class ContentURIAnalysis(Worker):
         max_sdk_version = apk.max_sdk_version
         effective_target_sdk_version = apk.effective_target_sdk_version
 
-        self.logger.info("min_sdk_version: {}".format(min_sdk_version))
-        self.logger.info("max_sdk_version: {}".format(max_sdk_version))
-        self.logger.info("effective_target_sdk_version: {}".format(effective_target_sdk_version))
+        self.logger.info(f"min_sdk_version: {min_sdk_version}")
+        self.logger.info(f"max_sdk_version: {max_sdk_version}")
+        self.logger.info(f"effective_target_sdk_version: {effective_target_sdk_version}")
 
         # Find the optimal target avd sdk version
         optimal_tag = None
@@ -85,22 +85,22 @@ class ContentURIAnalysis(Worker):
             self.logger.error("No optimal SDK version for this APK")
             return
 
-        self.logger.info("Optimal tag resolved: {}".format(optimal_tag))
+        self.logger.info(f"Optimal tag resolved: {optimal_tag}")
 
         # Start the docker container with the emulator
 
         container = client.containers.run(optimal_tag,
-                                          # auto_remove=True,
-                                          detach=True,
-                                          environment={'ANDROID_ARCH':'x86'},
-                                          privileged=True,
-                                          volumes={'/dev/kvm':{'bind':'/dev/kvm', 'mode':'rw'}})
+            # auto_remove=True,
+            detach=True,
+            environment={'ANDROID_ARCH':'x86'},
+            privileged=True,
+            volumes={'/dev/kvm':{'bind':'/dev/kvm', 'mode':'rw'}})
 
         connected = False
         max_attempts = 10
         # while attempts < max_attempts:
         #     # adb connect container.name:5555
 
-        self.logger.info("Container started with ID: {}".format(container.id))
+        self.logger.info(f"Container started with ID: {container.id}")
         #
         # container.stop()
