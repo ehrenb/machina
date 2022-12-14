@@ -1,5 +1,7 @@
 {
-    "passwords": ["infected",
-                  "infected!",
-                  "virus"]
+    "passwords": [
+        "infected",
+        "infected!",
+        "virus"
+    ]
 }

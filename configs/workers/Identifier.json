@@ -1,3 +1,6 @@
 {
-    "hash_algorithms": ["md5", "sha256"]
+    "hash_algorithms": [
+        "md5", 
+        "sha256"
+    ]
 }
