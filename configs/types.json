@@ -39,7 +39,8 @@
         "application/java-archive": "jar",
         "image/jpeg": "jpeg",
         "image/png": "png",
-        "application/x-tar": "tar"
+        "application/x-tar": "tar",
+        "application/vnd.android.package-archive": "apk"
     },
     "detailed_types": {
         "MIME entity, ISO-8859 text, with CRLF line terminators": "word",

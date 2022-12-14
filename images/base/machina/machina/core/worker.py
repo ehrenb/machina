@@ -80,6 +80,9 @@ class Worker(BaseAPI):
 
         self.channel = self.api.connection.channel()
 
+        # reduce Pika logging level
+        logging.getLogger('pika').setLevel(logging.ERROR)
+
         # The queue to bind to is the name of the class
         bind_queue = self.cls_name
 

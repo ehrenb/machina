@@ -97,8 +97,8 @@ class Identifier(Worker):
             else:
                 # If not resolved to a supported Machine type, tag it with a mime
                 # and it will become an Artifact node
-                self.logger.warn(f"{binary_fpath} type couldn't be resolved to supported type, is it supported? defaulted to mime type")
                 mime = magic.from_file(binary_fpath, mime=True)
+                self.logger.warn(f"{binary_fpath} type couldn't be resolved to supported type, is it supported? defaulted to mime type ({mime})")
                 resolved_type = mime 
 
         self.logger.info(f"resolved to: {resolved}")
