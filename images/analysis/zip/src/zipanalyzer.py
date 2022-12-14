@@ -18,7 +18,7 @@ class ZipAnalyzer(Worker):
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
         self.logger.info(f"resolved path: {target}")
-    
+        self.logger.debug("test debug log")
         zf = ZipFile(target)
         namelist = zf.namelist()
 

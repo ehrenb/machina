@@ -52,13 +52,14 @@ class Worker(BaseAPI):
     types = [] #indicates what queue to bind to, this should be completed in the subclass
 
     def __init__(self):
-        # Logging
-        logging.basicConfig(level=logging.INFO, format='[*] %(message)s')
-        self.logger = logging.getLogger(__name__)
-
         self.cls_name = self.__class__.__name__
         self.config = self._load_configs()
         self.schema = self._load_schema()
+
+        # Logging
+        level = logging.getLevelName(self.config['worker']['log_level'])
+        logging.basicConfig(level=level, format='[*] %(message)s')
+        self.logger = logging.getLogger(__name__)
 
         self.logger.info(f"Validating types: {pformat(self.types)}")
         types_valid, t = self._types_valid()
@@ -137,10 +138,16 @@ class Worker(BaseAPI):
         with open(types_fp, 'r') as f:
             types_cfg = json.load(f)
 
+        # Base-worker configurations, will be overridden by worker-specifc
+        # configurations if there is overlap
+        base_worker_cfg_fp = os.path.join(fdir, 'workers', 'Worker.json')
+        with open(base_worker_cfg_fp, 'r') as f:
+            worker_cfg = json.load(f)
+
         # Worker-specific configuration
         worker_cfg_fp = os.path.join(fdir, 'workers', self.cls_name+'.json')
         with open(worker_cfg_fp, 'r') as f:
-            worker_cfg = json.load(f)
+            worker_cfg.update(json.load(f))
 
         return dict(paths=paths_cfg,
                     rabbitmq=rabbitmq_cfg,

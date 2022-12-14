@@ -1,3 +1,5 @@
 {
-  "content_uris_regexs": ["(content://.*)"]
+  "content_uris_regexs": [
+    "(content://.*)"
+  ]
 }
