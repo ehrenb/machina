@@ -1,25 +1,29 @@
-FROM alpine:3.9
+FROM alpine:3.17
 
-RUN apk add --no-cache alpine-sdk \
-                    python3 \
-                    python3-dev\
-                    bash \
-                    gcc \
-                    git \
-                    freetype-dev \
-                    openssh-client \
-                    musl-dev \
-                    g++ \
-                    libffi-dev \
-                    libxml2-dev \
-                    libxml2 \
-                    libxslt \
-                    libxslt-dev \
-                    openssl \
-                    openssl-dev && \
-    python3 -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-pip3 install --trusted-host pypi.org \
+RUN apk --update add --no-cache \
+        alpine-sdk \
+        bash \
+        coreutils \
+        freetype-dev \
+        gcc \
+        git \
+        g++ \
+        openssh-client \
+        libffi-dev \
+        libxml2-dev \
+        libxml2 \
+        libxslt \
+        libxslt-dev \
+        musl-dev \
+        openssl \
+        openssl-dev \
+        python3 \
+        python3-dev
+
+RUN python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip
+
+RUN pip3 install --trusted-host pypi.org \
                 --trusted-host pypi.python.org \
                 --trusted-host files.pythonhosted.org \
                 --upgrade pip setuptools && \

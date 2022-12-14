@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 import re
 
 from androguard.misc import AnalyzeAPK
@@ -17,9 +18,12 @@ class AndroguardAnalysis(Worker):
         # self.logger.info(data)
         data = json.loads(data)
 
+        # reduce androguard logging level
+        logging.getLogger('androguard').setLevel(logging.ERROR)
+
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         a, d, dx = AnalyzeAPK(target)
 

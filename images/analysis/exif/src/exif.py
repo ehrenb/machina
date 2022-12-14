@@ -16,7 +16,7 @@ class Exif(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         with open(target, 'rb') as f:
             exif_tags = exifread.process_file(f)

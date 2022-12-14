@@ -13,8 +13,8 @@ from machina.core.models.relationships.retypedto import RetypedTo
 
 class Identifier(Worker):
     """Identifier is the entrypoint to the system
-       therefore, it does require any types, and can only be
-       invoked directly by publishing to the Identifier queue
+    therefore, it does require any types, and can only be
+    invoked directly by publishing to the Identifier queue
     """
     next_queues = []
     types = []
@@ -97,11 +97,11 @@ class Identifier(Worker):
             else:
                 # If not resolved to a supported Machine type, tag it with a mime
                 # and it will become an Artifact node
-                self.logger.warn("{} type couldn't be resolved to supported type, is it supported? defaulted to mime type".format(binary_fpath))
                 mime = magic.from_file(binary_fpath, mime=True)
+                self.logger.warn(f"{binary_fpath} type couldn't be resolved to supported type, is it supported? defaulted to mime type ({mime})")
                 resolved_type = mime 
 
-        self.logger.info("resolved to: {}".format(resolved))
+        self.logger.info(f"resolved to: {resolved}")
 
         body = {'ts': ts_fs,
                 'hashes': hashes,
@@ -122,10 +122,10 @@ class Identifier(Worker):
         else:
             # Create a generic entry (Artifact)
             node = self.graph.artifacts.create(md5=body['hashes']['md5'],
-                                               sha256=body['hashes']['sha256'],
-                                               size=size,
-                                               ts=ts_db,
-                                               type=resolved_type)
+                sha256=body['hashes']['sha256'],
+                size=size,
+                ts=ts_db,
+                type=resolved_type)
 
         body['id'] = node._id
 
@@ -135,7 +135,7 @@ class Identifier(Worker):
         origin_node = None
         if 'origin' in data.keys():
             # Retrieve the originating Node cls from the database
-             origin_node = self.graph.get_vertex(data['origin']['id'])
+            origin_node = self.graph.get_vertex(data['origin']['id'])
 
         # If the resolved originating hash matches the given hash
         # this is a retype of a previous Node.
@@ -159,11 +159,11 @@ class Identifier(Worker):
             # publish to resolved type routing key
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
-                                   routing_key=resolved_type,
-                                   body=json.dumps(body))
+                routing_key=resolved_type,
+                body=json.dumps(body))
 
             channel = self.get_channel(self.config['rabbitmq'])
             # publish to wildcard routing key
             channel.basic_publish(exchange='machina',
-                                   routing_key='*',
-                                   body=json.dumps(body))
+                routing_key='*',
+                body=json.dumps(body))

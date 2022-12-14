@@ -18,13 +18,13 @@ class SSDeepAnalysis(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
 
         # Compute SSDeep Hash
         with open(target, 'rb') as f:
             ssdeep_hash = ssdeep.hash(f.read())
 
-        self.logger.info("ssdeep for {} is {}".format(target, ssdeep_hash))
+        self.logger.info(f"ssdeep for {target} is {ssdeep_hash}")
 
         # Update node
         updates = dict(ssdeep=ssdeep_hash)

@@ -30,14 +30,13 @@ class FindURLs(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("hello resolved path: {}".format(target))
 
         with open(target, 'r', errors="ignore") as f:
             strings = ' '.join(_strings(f.read()))
 
         urls = find_iocs(strings)['urls']
 
-        self.logger.info("found urls: {}".format(urls))
+        self.logger.info(f"found urls: {urls}")
 
         # Resolve origin node
         origin_node = self.graph.get_vertex(data['id'])
@@ -45,7 +44,7 @@ class FindURLs(Worker):
         # For each URL, create a node for it
         # And link it back to the original node
         for url in urls:
-            self.logger.info("creating url node for: {}".format(url))
+            self.logger.info(f"creating url node for: {url}")
             url_node = self.graph.urls.create(url=url)
             self.logger.info("creating link")
             self.graph.create_edge(Extracts, origin_node, url_node)

@@ -15,7 +15,7 @@ class JarAnalyzer(Worker):
 
         # resolve path
         target = self.get_binary_path(data['ts'], data['hashes']['md5'])
-        self.logger.info("resolved path: {}".format(target))
+        self.logger.info(f"resolved path: {target}")
     
         zf = ZipFile(target)
         namelist = zf.namelist()
@@ -24,7 +24,7 @@ class JarAnalyzer(Worker):
         if 'classes.dex' in namelist and 'META-INF/MANIFEST.MF' in namelist:
             # retype (Submit original data to Identifier with origin metadata and 
             # new  type)
-            self.logger.info("retyping {} to apk".format(target))
+            self.logger.info(f"retyping {target} to apk")
             with open(target, 'rb') as f:
                 data_encoded = base64.b64encode(f.read()).decode()
             body = {
@@ -38,7 +38,7 @@ class JarAnalyzer(Worker):
 
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
-                                       routing_key='Identifier',
-                                       body=json.dumps(body))
+                routing_key='Identifier',
+                body=json.dumps(body))
         else:
             pass

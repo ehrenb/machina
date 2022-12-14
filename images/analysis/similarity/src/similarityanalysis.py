@@ -38,7 +38,7 @@ class SimilarityAnalysis(Worker):
             if obj_node_type in ttypes:
                 types_to_compare = [stype]
 
-        self.logger.info("Comparing against types: {}".format(types_to_compare))
+        self.logger.info(f"Comparing against types: {types_to_compare}")
 
         for type_to_compare in types_to_compare:
             c = self.resolve_db_node_cls(type_to_compare)
@@ -53,7 +53,7 @@ class SimilarityAnalysis(Worker):
                     result = ssdeep.compare(obj.ssdeep, t.ssdeep)
                     # check threshold
                     if result > ssdeep_threshold:
-                        self.logger.info("Establishing similarity link between {} {} with result {}".format(obj._id, t._id, result))
+                        self.logger.info(f"Establishing similarity link between {obj._id} {t._id} with result {result}")
 
                         # TODO: figure out how to add data to relationship
                         data = {
