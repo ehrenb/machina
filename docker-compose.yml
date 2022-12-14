@@ -1,7 +1,7 @@
 version: '3'
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.9-management
     environment:
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
@@ -13,7 +13,7 @@ services:
       - machinanet
 
   orientdb:
-    image: orientdb:3.2 #orientdb:2.2
+    image: orientdb:3.2
     ports:
       - 2424:2424
       - 2480:2480
