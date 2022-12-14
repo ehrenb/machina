@@ -135,7 +135,7 @@ class Identifier(Worker):
         origin_node = None
         if 'origin' in data.keys():
             # Retrieve the originating Node cls from the database
-             origin_node = self.graph.get_vertex(data['origin']['id'])
+            origin_node = self.graph.get_vertex(data['origin']['id'])
 
         # If the resolved originating hash matches the given hash
         # this is a retype of a previous Node.
@@ -159,11 +159,11 @@ class Identifier(Worker):
             # publish to resolved type routing key
             channel = self.get_channel(self.config['rabbitmq'])
             channel.basic_publish(exchange='machina',
-                                   routing_key=resolved_type,
-                                   body=json.dumps(body))
+                routing_key=resolved_type,
+                body=json.dumps(body))
 
             channel = self.get_channel(self.config['rabbitmq'])
             # publish to wildcard routing key
             channel.basic_publish(exchange='machina',
-                                   routing_key='*',
-                                   body=json.dumps(body))
+                routing_key='*',
+                body=json.dumps(body))
