@@ -26,7 +26,7 @@ services:
 
   base-alpine:
     build: 
-      context: ./images/base
+      context: ./images/machina-base
       dockerfile: Dockerfile.alpine
       args:
         - BRANCH=${BRANCH}
@@ -35,7 +35,7 @@ services:
 
   base-ubuntu:
     build:
-      context: ./images/base
+      context: ./images/machina-base
       dockerfile: Dockerfile.ubuntu
       args:
         - BRANCH=${BRANCH}
@@ -46,7 +46,7 @@ services:
     depends_on:
       - base-alpine
     build:
-      context: ./images/identifier
+      context: ./images/machina-identifier
     image: machina/identifier
     volumes:
       - ./data:/data
@@ -62,8 +62,8 @@ services:
     depends_on:
       - base-alpine
     build: 
-      context: ./images/analysis/zip
-    image: machina/analysis/zip
+      context: ./images/machina-zip
+    image: machina/zip
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -78,8 +78,8 @@ services:
     depends_on:
       - base-alpine
     build: 
-      context: ./images/analysis/jar
-    image: machina/analysis/jar
+      context: ./images/machina-jar
+    image: machina/jar
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -94,8 +94,8 @@ services:
     depends_on:
       - base-alpine
     build: 
-      context: ./images/analysis/androguard
-    image: machina/analysis/androguard
+      context: ./images/machina-androguard
+    image: machina/androguard
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -110,8 +110,8 @@ services:
     depends_on:
       - base-alpine
     build: 
-      context: ./images/analysis/findurls
-    image: machina/analysis/findurls
+      context: ./images/machina-findurls
+    image: machina/findurls
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -126,8 +126,8 @@ services:
     depends_on:
       - base-alpine
     build:
-      context: ./images/analysis/exif
-    image: machina/analysis/exif
+      context: ./images/machina-exif
+    image: machina/exif
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -142,8 +142,8 @@ services:
     depends_on:
       - base-alpine
     build:
-      context: ./images/analysis/gzip
-    image: machina/analysis/gzip
+      context: ./images/machina-gzip
+    image: machina/gzip
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -158,8 +158,8 @@ services:
     depends_on:
       - base-alpine
     build:
-      context: ./images/analysis/tar
-    image: machina/analysis/tar
+      context: ./images/machina-tar
+    image: machina/tar
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -174,8 +174,8 @@ services:
     depends_on:
       - base-ubuntu
     build:
-      context: ./images/analysis/ssdeep
-    image: machina/analysis/ssdeep
+      context: ./images/machina-ssdeep
+    image: machina/ssdeep
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -190,8 +190,8 @@ services:
     depends_on:
       - base-ubuntu
     build:
-      context: ./images/analysis/ssdeep
-    image: machina/analysis/ssdeep
+      context: ./images/machina-ssdeep
+    image: machina/ssdeep
     volumes:
       - ./data:/data
       - ./configs:/configs
@@ -206,8 +206,8 @@ services:
 #    depends_on:
 #      - base-alpine
 #    build:
-#      context: ./images/analysis/contenturianalysis
-#    image: machina/analysis/contenturianalysis
+#      context: ./images/machina-content-uri-analysis
+#    image: machina/content-uri-analysis
 #    volumes:
 #      - ./data:/data
 #      - ./configs:/configs
@@ -215,7 +215,7 @@ services:
 #      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon. Maybe in the future, this could be removed by having a pool of standby emulators in containers
 #    command:
 #      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
-#        && python3 images/analysis/tar/src/run.py"
+#        && python3 images/machina-tar/src/run.py"
 #    networks:
 #      - machinanet
 

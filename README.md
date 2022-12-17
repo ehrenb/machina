@@ -42,13 +42,14 @@ It is recommended to set up and use a Python 3 virtual environment to isolate de
 Create a virtual environment:
 
 ```
-virtualenv -p python3 machina
-source machina/bin/activate
+virtualenv -p python3 machina-cli
+source machina-cli/bin/activate
 ```
 
 Install the client:
 
 ```
+cd cli
 python setup.py install
 ```
 
@@ -56,12 +57,35 @@ python setup.py install
 
 * [Install Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
-Build the services:
+### Production Setup
 
-* This will build from the branch defined in .env, if you want to change the branch that Machina will be built from, edit the the top-level .env file
+TODO: use registry
+
+#### Clone
+
+```bash
+git clone git@github.com:ehrenb/machina.git
+```
+
+#### Pull
+
+```bash
+docker compose pull
+```
+
+### Development Setup
+
+#### Clone:
+
+git clone --recurse-submodules git@github.com:ehrenb/machina.git &&
+  git submodule foreach git pull
+
+#### Build:
+
+* This will build Machina and all of its analysis services from the local source
 
 ```
-docker compose build
+docker compose build base-alpine base-ubuntu && docker compose build
 ```
 
 ## Run and daemonize services
