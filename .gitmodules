@@ -1,0 +1,36 @@
+[submodule "images/machina-androguard"]
+	path = images/machina-androguard
+	url = git@github.com:ehrenb/machina-androguard.git
+[submodule "images/machina-base"]
+	path = images/machina-base
+	url = git@github.com:ehrenb/machina-base.git
+[submodule "images/machina-identifier"]
+	path = images/machina-identifier
+	url = git@github.com:ehrenb/machina-identifier.git
+[submodule "images/machina-content-uri-analysis"]
+	path = images/machina-content-uri-analysis
+	url = git@github.com:ehrenb/machina-content-uri-analysis.git
+[submodule "images/machina-exif"]
+	path = images/machina-exif
+	url = git@github.com:ehrenb/machina-exif.git
+[submodule "images/machina-findurls"]
+	path = images/machina-findurls
+	url = git@github.com:ehrenb/machina-findurls.git
+[submodule "images/machina-gzip"]
+	path = images/machina-gzip
+	url = git@github.com:ehrenb/machina-gzip.git
+[submodule "images/machina-jar"]
+	path = images/machina-jar
+	url = git@github.com:ehrenb/machina-jar.git
+[submodule "images/machina-similarity"]
+	path = images/machina-similarity
+	url = git@github.com:ehrenb/machina-similarity.git
+[submodule "images/machina-ssdeep"]
+	path = images/machina-ssdeep
+	url = git@github.com:ehrenb/machina-ssdeep.git
+[submodule "images/machina-tar"]
+	path = images/machina-tar
+	url = git@github.com:ehrenb/machina-tar.git
+[submodule "images/machina-zip"]
+	path = images/machina-zip
+	url = git@github.com:ehrenb/machina-zip.git

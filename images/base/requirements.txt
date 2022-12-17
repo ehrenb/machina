@@ -1,6 +1,0 @@
-jsonschema
-pika
-git+https://github.com/baesystemsFASTLabs/pyorient.git@7e46e166e616bcfea1ccdc31d5e7187f7bbce806#egg=pyorient
-# git+https://github.com/orientechnologies/pyorient.git@ca7690a95f57262b6b91f3545ac98def052d4193#egg=pyorient
-# -e git+https://github.com/alanmeeson/pyorient.git@0317a87369675df9b33fd38af451099c3c011d40#egg=pyorient
-# -e git+https://github.com/brucetony/pyorient.git@ec328f2b4f51664819e48895b86f8912d22415a6#egg=pyorient
