@@ -69,6 +69,9 @@ git clone git@github.com:ehrenb/machina.git
 
 #### Pull
 
+* This will pull pre-built Machina images
+
+
 ```bash
 docker compose pull
 ```
@@ -77,14 +80,18 @@ docker compose pull
 
 #### Clone:
 
-git clone --recurse-submodules git@github.com:ehrenb/machina.git &&
+```bash
+git clone --recurse-submodules git@github.com:ehrenb/machina.git &&\
+  cd machina &&\
+  git submodule foreach git checkout main &&\
   git submodule foreach git pull
+```
 
 #### Build:
 
 * This will build Machina and all of its analysis services from the local source
 
-```
+```bash
 docker compose build base-alpine base-ubuntu && docker compose build
 ```
 
@@ -96,7 +103,7 @@ docker compose up -d
 ```
 
 
-Scaling workers:
+Scaling additional workers:
 
 ```bash
 docker compose scale identifier=2 androguardanalysis=5
@@ -131,6 +138,7 @@ Delete the database (WARNING: this will delete all of your data!)
 ```bash
 docker volume rm machina_orientdb-data
 ```
+
 
 ## Module development
 
