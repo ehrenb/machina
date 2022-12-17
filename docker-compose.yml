@@ -28,8 +28,6 @@ services:
     build: 
       context: ./images/machina-base
       dockerfile: Dockerfile.alpine
-      args:
-        - BRANCH=${BRANCH}
     image: machina/base-alpine
     command: echo 'scaled'
 
@@ -37,8 +35,6 @@ services:
     build:
       context: ./images/machina-base
       dockerfile: Dockerfile.ubuntu
-      args:
-        - BRANCH=${BRANCH}
     image: machina/base-ubuntu
     command: echo 'scaled'
 

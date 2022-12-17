@@ -59,7 +59,7 @@ python setup.py install
 
 ### Production Setup
 
-TODO: use registry
+Section is WIP
 
 #### Clone
 
@@ -69,8 +69,7 @@ git clone git@github.com:ehrenb/machina.git
 
 #### Pull
 
-* This will pull pre-built Machina images
-
+* This will pull the latest pre-built Machina images
 
 ```bash
 docker compose pull
