@@ -1,5 +1,0 @@
-{
-    "allOf": [{ "$ref": "binary.json"}],
-    "properties": {
-    }
-}
