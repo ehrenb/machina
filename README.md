@@ -141,4 +141,4 @@ docker volume rm machina_orientdb-data
 
 ## Module development
 
-Read over the [Module Development](images/README.md) guide and some of the various [module sources](images/).
+* Read over the [Module Development](images/README.md) guide and some of the various [module sources](images/).

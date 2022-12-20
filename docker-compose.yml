@@ -28,14 +28,14 @@ services:
     build: 
       context: ./images/machina-base
       dockerfile: Dockerfile.alpine
-    image: machina/base-alpine
+    image: behren/machina-base-alpine:latest
     command: echo 'scaled'
 
   base-ubuntu:
     build:
       context: ./images/machina-base
       dockerfile: Dockerfile.ubuntu
-    image: machina/base-ubuntu
+    image: behren/machina-base-ubuntu:latest
     command: echo 'scaled'
 
   identifier:
@@ -43,11 +43,10 @@ services:
       - base-alpine
     build:
       context: ./images/machina-identifier
-    image: machina/identifier
+    image: behren/machina-identifier:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -59,11 +58,10 @@ services:
       - base-alpine
     build: 
       context: ./images/machina-zip
-    image: machina/zip
+    image: behren/machina-zip:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -75,11 +73,10 @@ services:
       - base-alpine
     build: 
       context: ./images/machina-jar
-    image: machina/jar
+    image: behren/machina-jar:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -91,11 +88,10 @@ services:
       - base-alpine
     build: 
       context: ./images/machina-androguard
-    image: machina/androguard
+    image: behren/machina-androguard:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -107,11 +103,10 @@ services:
       - base-alpine
     build: 
       context: ./images/machina-findurls
-    image: machina/findurls
+    image: behren/machina-findurls:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -123,11 +118,10 @@ services:
       - base-alpine
     build:
       context: ./images/machina-exif
-    image: machina/exif
+    image: behren/machina-exif:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -139,11 +133,10 @@ services:
       - base-alpine
     build:
       context: ./images/machina-gzip
-    image: machina/gzip
+    image: behren/machina-gzip:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -155,11 +148,10 @@ services:
       - base-alpine
     build:
       context: ./images/machina-tar
-    image: machina/tar
+    image: behren/machina-tar:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -171,11 +163,10 @@ services:
       - base-ubuntu
     build:
       context: ./images/machina-ssdeep
-    image: machina/ssdeep
+    image: behren/machina-ssdeep:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -187,11 +178,10 @@ services:
       - base-ubuntu
     build:
       context: ./images/machina-ssdeep
-    image: machina/ssdeep
+    image: behren/machina-similarity:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
-      - ./schemas:/schemas
     command:
       bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
         && python3 src/run.py"
@@ -203,11 +193,10 @@ services:
 #      - base-alpine
 #    build:
 #      context: ./images/machina-content-uri-analysis
-#    image: machina/content-uri-analysis
+#    image: behren/machina-contenturianalysis:latest
 #    volumes:
 #      - ./data:/data
 #      - ./configs:/configs
-#      - ./schemas:/schemas
 #      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon. Maybe in the future, this could be removed by having a pool of standby emulators in containers
 #    command:
 #      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
