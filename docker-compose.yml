@@ -188,6 +188,20 @@ services:
     networks:
       - machinanet
 
+  binwalk:
+    depends_on:
+      - base-ubuntu
+    build:
+      context: ./images/machina-binwalk
+    image: behren/machina-binwalk:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh rabbitmq:5672 -- ./wait-for-it.sh orientdb:2424
+        && python3 src/run.py"
+    networks:
+      - machinanet
 #  contenturianalysis:
 #    depends_on:
 #      - base-alpine

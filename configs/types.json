@@ -17,6 +17,7 @@
                         "tar",
                         "rtf",
                         "zip",
+                        "jffs2",
                         "*"],
     "mimes": {
         "application/x-dosexec":"pe",
@@ -56,6 +57,7 @@
         "PDF document": "pdf",
         "PNG image data": "png",
         "JPEG image data": "jpeg",
-        "POSIX tar archive": "tar"
+        "POSIX tar archive": "tar",
+        "Linux jffs2 filesystem data little endian": "jffs2"
     }
 }
