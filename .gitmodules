@@ -34,3 +34,6 @@
 [submodule "images/machina-zip"]
 	path = images/machina-zip
 	url = git@github.com:ehrenb/machina-zip.git
+[submodule "images/machina-binwalk"]
+	path = images/machina-binwalk
+	url = git@github.com:ehrenb/machina-binwalk.git
