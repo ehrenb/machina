@@ -64,7 +64,7 @@ Section is WIP
 #### Clone
 
 ```bash
-git clone git@github.com:ehrenb/machina.git
+git clone https://github.com/ehrenb/machina.git
 ```
 
 #### Pull
@@ -80,7 +80,7 @@ docker compose pull
 #### Clone:
 
 ```bash
-git clone --recurse-submodules git@github.com:ehrenb/machina.git &&\
+git clone --recurse-submodules https://github.com/ehrenb/machina.git &&\
   cd machina &&\
   git submodule foreach git checkout main &&\
   git submodule foreach git pull
