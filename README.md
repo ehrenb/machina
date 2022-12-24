@@ -86,6 +86,14 @@ git clone --recurse-submodules https://github.com/ehrenb/machina.git &&\
   git submodule foreach git pull
 ```
 
+To push to this repository with SSH instead of HTTPS, set the remote for each repo to its respective SSH url:
+
+```bash
+cd machina
+git remote set-url --push origin git@github.com:ehrenb/machina.git &&\
+  git submodule foreach 'git remote set-url --push origin git@github.com:ehrenb/${name##*/}.git'
+```
+
 #### Build:
 
 * This will build Machina and all of its analysis services from the local source
