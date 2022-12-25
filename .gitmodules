@@ -37,3 +37,6 @@
 [submodule "images/machina-binwalk"]
 	path = images/machina-binwalk
 	url = https://github.com/ehrenb/machina-binwalk.git
+[submodule "images/machina-initializer"]
+	path = images/machina-initializer
+	url = https://github.com/ehrenb/machina-initializer.git
