@@ -23,3 +23,7 @@ cd machina
 git remote set-url --push origin git@github.com:ehrenb/machina.git &&\
   git submodule foreach 'git remote set-url --push origin git@github.com:ehrenb/${name##*/}.git'
 ```
+
+## docstrings
+
+docstrings format: [Sphinx](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
