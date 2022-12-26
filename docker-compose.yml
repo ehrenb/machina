@@ -38,6 +38,18 @@ services:
     image: behren/machina-base-ubuntu:latest
     command: echo 'scaled'
 
+  docs-web:
+    depends_on:
+      - base-alpine
+    ports: 
+      - 8000:8000
+    build:
+      context: ./images/machina-docs
+      dockerfile: Dockerfile
+    image: behren/machina-docs:latest
+    command: 
+      bash -c "cd /machina/docs/build/html && python3 -m http.server 8000"
+
   identifier:
     depends_on:
       - base-alpine
@@ -99,21 +111,21 @@ services:
     networks:
       - machinanet
 
-  androguardanalysis:
-    depends_on:
-      - base-alpine
-      - initializer
-    build: 
-      context: ./images/machina-androguard
-    image: behren/machina-androguard:latest
-    volumes:
-      - ./data:/data
-      - ./configs:/configs
-    command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
-        && python3 src/run.py"
-    networks:
-      - machinanet
+  # androguardanalysis:
+  #   depends_on:
+  #     - base-alpine
+  #     - initializer
+  #   build: 
+  #     context: ./images/machina-androguard
+  #   image: behren/machina-androguard:latest
+  #   volumes:
+  #     - ./data:/data
+  #     - ./configs:/configs
+  #   command:
+  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+  #       && python3 src/run.py"
+  #   networks:
+  #     - machinanet
 
   findurls:
     depends_on:
@@ -211,21 +223,21 @@ services:
     networks:
       - machinanet
 
-  binwalk:
-    depends_on:
-      - base-ubuntu
-      - initializer
-    build:
-      context: ./images/machina-binwalk
-    image: behren/machina-binwalk:latest
-    volumes:
-      - ./data:/data
-      - ./configs:/configs
-    command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
-        && python3 src/run.py"
-    networks:
-      - machinanet
+  # binwalk:
+  #   depends_on:
+  #     - base-ubuntu
+  #     - initializer
+  #   build:
+  #     context: ./images/machina-binwalk
+  #   image: behren/machina-binwalk:latest
+  #   volumes:
+  #     - ./data:/data
+  #     - ./configs:/configs
+  #   command:
+  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+  #       && python3 src/run.py"
+  #   networks:
+  #     - machinanet
 
 #  contenturianalysis:
 #    depends_on:
