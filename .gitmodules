@@ -43,3 +43,6 @@
 [submodule "images/machina-docs"]
 	path = images/machina-docs
 	url = https://github.com/ehrenb/machina-docs.git
+[submodule "images/machina-bz2"]
+	path = images/machina-bz2
+	url = https://github.com/ehrenb/machina-bz2.git

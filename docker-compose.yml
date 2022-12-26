@@ -175,6 +175,22 @@ services:
     networks:
       - machinanet
 
+  bzip2:
+    depends_on:
+      - base-alpine
+      - initializer
+    build:
+      context: ./images/machina-bz2
+    image: behren/machina-bz2:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+        && python3 src/run.py"
+    networks:
+      - machinanet
+
   tar:
     depends_on:
       - base-alpine
