@@ -1,5 +1,6 @@
 {
     "available_types": ["apk",
+                        "cpio",
                         "dex",
                         "elf",
                         "eml",
@@ -9,6 +10,7 @@
                         "jar",
                         "jffs2",
                         "jpeg",
+                        "lzma",
                         "macho",
                         "memory_dump",
                         "msg",
@@ -18,6 +20,7 @@
                         "powerpoint",
                         "tar",
                         "rtf",
+                        "squashfs",
                         "word",
                         "zip",
                         "*"],
@@ -60,6 +63,9 @@
         "PNG image data": "png",
         "JPEG image data": "jpeg",
         "POSIX tar archive": "tar",
-        "Linux jffs2 filesystem data little endian": "jffs2"
+        "Linux jffs2 filesystem data little endian": "jffs2",
+        "Squashfs filesystem, little endian": "squashfs",
+        "ASCII cpio archive": "cpio",
+        "LZMA compressed data": "lzma"
     }
 }
