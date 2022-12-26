@@ -10,7 +10,7 @@ Entrypoint to the system - determines a type for the input data and tags it, tri
 
 ### Dockerfile
 
-* Base image should be "machina/base-alpine3" OR "machina/base-ubuntu18"
+* Base image should be "behren/base-alpine" OR "behren/base-ubuntu"
     - An alpine base is preferred, because it is lighter
     - The ubuntu base makes dependency installation easier, but can increase image size
 * Install any system requirements needed for the worker module you are creating
@@ -61,7 +61,7 @@ class MyWorker(Worker):
     
     def callback(self, data, properties):
         ...
-        self.publish_next(data) # publish to queues configured in 'next_queues'
+        self.publish_next(json.dumps(data)) # publish to queues configured in 'next_queues'
 ``` 
 OR 
 ```python
@@ -69,7 +69,7 @@ class MyWorker(Worker):
     ...
     def callback(self, data, properties):
         ...
-        self.publish(data, queues=['Identifier']) # publish to 'Identifier'
+        self.publish(json.dumps(data), queues=['Identifier']) # publish to 'Identifier'
 ```
 
 This workflow can also be used to invoke other modules directly, e.g. SSDeepAnalysis will compute ssdeep hashes for files, and invoke the SimilaryAnalysis module to do the comparison
@@ -116,18 +116,18 @@ The snippet below is an example of when the Zip analysis module detects that it 
 
 ```python
 body = {
-        "data": data_encoded,
-        "origin": {
-            "ts": data['ts'],
-            "md5": data['hashes']['md5'],
-            "id": data['id'], #I think this is the only field needed, we can grab the unique node based on id alone
-            "type": data['type']},
-        'type': 'apk'}
+    "data": data_encoded,
+    "origin": {
+        "ts": data['ts'],
+        "md5": data['hashes']['md5'],
+        "id": data['id'], #I think this is the only field needed, we can grab the unique node based on id alone
+        "type": data['type']
+    },
+    'type': 'apk'
+}
 
-channel = self.get_channel(self.config['rabbitmq'])
-channel.basic_publish(exchange='machina',
-                       routing_key='Identifier',
-                       body=json.dumps(body))
+self.publish(json.dumps(data), queues=['Identifier']) # publish to 'Identifier'
+
 ```  
 
 
