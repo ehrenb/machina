@@ -43,10 +43,12 @@ services:
       - base-alpine
     ports: 
       - 80:80
+      - 2019:2019
     build:
       context: ./images/machina-docs
       dockerfile: Dockerfile
     image: behren/machina-docs:latest
+    command: bash -c "caddy run --config /machina/Caddyfile.dev"
 
   identifier:
     depends_on:
