@@ -42,13 +42,11 @@ services:
     depends_on:
       - base-alpine
     ports: 
-      - 8000:8000
+      - 80:80
     build:
       context: ./images/machina-docs
       dockerfile: Dockerfile
     image: behren/machina-docs:latest
-    command: 
-      bash -c "cd /machina/docs/build/html && python3 -m http.server 8000"
 
   identifier:
     depends_on:
