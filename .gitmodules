@@ -46,3 +46,6 @@
 [submodule "images/machina-bz2"]
 	path = images/machina-bz2
 	url = https://github.com/ehrenb/machina-bz2.git
+[submodule "images/machina-base-ghidra"]
+	path = images/machina-base-ghidra
+	url = https://github.com/ehrenb/machina-base-ghidra.git
