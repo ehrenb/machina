@@ -49,3 +49,6 @@
 [submodule "images/machina-base-ghidra"]
 	path = images/machina-base-ghidra
 	url = https://github.com/ehrenb/machina-base-ghidra.git
+[submodule "images/machina-ghidra-project-creator"]
+	path = images/machina-ghidra-project-creator
+	url = https://github.com/ehrenb/machina-ghidra-project-creator.git
