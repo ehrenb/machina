@@ -38,6 +38,15 @@ services:
     image: behren/machina-base-ubuntu:latest
     command: echo 'scaled'
 
+  base-ghidra:
+    build:
+      context: ./images/machina-base-ghidra
+      dockerfile: Dockerfile
+    depends_on:
+      - base-ubuntu
+    image: behren/machina-base-ghidra:latest
+    command: echo 'scaled'
+
   docs-web:
     depends_on:
       - base-alpine
@@ -246,6 +255,22 @@ services:
     build:
       context: ./images/machina-binwalk
     image: behren/machina-binwalk:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+        && python3 src/run.py"
+    networks:
+      - machinanet
+
+  ghidra-project-creator:
+    depends_on:
+      - base-ghidra
+      - initializer
+    build:
+      context: ./images/machina-ghidra-project-creator
+    image: behren/machina-ghidra-project-creator:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
