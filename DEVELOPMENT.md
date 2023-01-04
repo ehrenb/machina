@@ -27,3 +27,12 @@ git remote set-url --push origin git@github.com:ehrenb/machina.git &&\
 ## docstrings
 
 docstrings format: [Sphinx](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
+
+## viz
+
+Compose 'depends_on' dependency graph:
+
+```bash
+cd machina/
+docker run --rm -it --name dcv -v $(pwd):/input pmsipilot/docker-compose-viz render -m image --force docker-compose.yml --output-file=topology.png --no-volumes --no-ports --no-networks
+```
