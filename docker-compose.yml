@@ -12,18 +12,6 @@ services:
     networks:
       - machinanet
 
-  # orientdb:
-  #   image: orientdb:3.2
-  #   ports:
-  #     - 2424:2424
-  #     - 2480:2480
-  #   environment:
-  #     ORIENTDB_ROOT_PASSWORD: "root"
-  #   volumes:
-  #     - orientdb-data:/orientdb/databases
-  #   networks:
-  #     - machinanet
-
   neo4j:
     image: neo4j:4.1-community #neo4j:5.3.0-community
     ports:
@@ -56,26 +44,26 @@ services:
     image: behren/machina-base-ubuntu:latest
     command: echo 'scaled'
 
-  # base-ghidra:
-  #   build:
-  #     context: ./images/machina-base-ghidra
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - base-ubuntu
-  #   image: behren/machina-base-ghidra:latest
-  #   command: echo 'scaled'
+  base-ghidra:
+    build:
+      context: ./images/machina-base-ghidra
+      dockerfile: Dockerfile
+    depends_on:
+      - base-ubuntu
+    image: behren/machina-base-ghidra:latest
+    command: echo 'scaled'
 
-  # docs-web:
-  #   depends_on:
-  #     - base-alpine
-  #   ports: 
-  #     - 80:80
-  #     - 2019:2019
-  #   build:
-  #     context: ./images/machina-docs
-  #     dockerfile: Dockerfile
-  #   image: behren/machina-docs:latest
-  #   command: bash -c "caddy run --config /machina/Caddyfile.dev"
+  docs-web:
+    depends_on:
+      - base-alpine
+    ports: 
+      - 80:80
+      - 2019:2019
+    build:
+      context: ./images/machina-docs
+      dockerfile: Dockerfile
+    image: behren/machina-docs:latest
+    command: bash -c "caddy run --config /machina/Caddyfile.dev"
 
   identifier:
     depends_on:
@@ -154,149 +142,149 @@ services:
     networks:
       - machinanet
 
-  # findurls:
-  #   depends_on:
-  #     - base-alpine
-  #     - initializer
-  #   build: 
-  #     context: ./images/machina-findurls
-  #   image: behren/machina-findurls:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  findurls:
+    depends_on:
+      - base-alpine
+      - initializer
+    build: 
+      context: ./images/machina-findurls
+    image: behren/machina-findurls:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # exif:
-  #   depends_on:
-  #     - base-alpine
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-exif
-  #   image: behren/machina-exif:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  exif:
+    depends_on:
+      - base-alpine
+      - initializer
+    build:
+      context: ./images/machina-exif
+    image: behren/machina-exif:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # gzip:
-  #   depends_on:
-  #     - base-alpine
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-gzip
-  #   image: behren/machina-gzip:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  gzip:
+    depends_on:
+      - base-alpine
+      - initializer
+    build:
+      context: ./images/machina-gzip
+    image: behren/machina-gzip:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # bzip2:
-  #   depends_on:
-  #     - base-alpine
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-bz2
-  #   image: behren/machina-bz2:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  bzip2:
+    depends_on:
+      - base-alpine
+      - initializer
+    build:
+      context: ./images/machina-bz2
+    image: behren/machina-bz2:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # tar:
-  #   depends_on:
-  #     - base-alpine
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-tar
-  #   image: behren/machina-tar:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  tar:
+    depends_on:
+      - base-alpine
+      - initializer
+    build:
+      context: ./images/machina-tar
+    image: behren/machina-tar:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # ssdeepanalysis:
-  #   depends_on:
-  #     - base-ubuntu
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-ssdeep
-  #   image: behren/machina-ssdeep:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  ssdeepanalysis:
+    depends_on:
+      - base-ubuntu
+      - initializer
+    build:
+      context: ./images/machina-ssdeep
+    image: behren/machina-ssdeep:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # similarityanalysis:
-  #   depends_on:
-  #     - base-ubuntu
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-ssdeep
-  #   image: behren/machina-similarity:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  similarityanalysis:
+    depends_on:
+      - base-ubuntu
+      - initializer
+    build:
+      context: ./images/machina-similarity
+    image: behren/machina-similarity:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # binwalk:
-  #   depends_on:
-  #     - base-ubuntu
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-binwalk
-  #   image: behren/machina-binwalk:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  binwalk:
+    depends_on:
+      - base-ubuntu
+      - initializer
+    build:
+      context: ./images/machina-binwalk
+    image: behren/machina-binwalk:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
-  # ghidra-project-creator:
-  #   depends_on:
-  #     - base-ghidra
-  #     - initializer
-  #   build:
-  #     context: ./images/machina-ghidra-project-creator
-  #   image: behren/machina-ghidra-project-creator:latest
-  #   volumes:
-  #     - ./data:/data
-  #     - ./configs:/configs
-  #   command:
-  #     bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-  #       && python3 src/run.py"
-  #   networks:
-  #     - machinanet
+  ghidra-project-creator:
+    depends_on:
+      - base-ghidra
+      - initializer
+    build:
+      context: ./images/machina-ghidra-project-creator
+    image: behren/machina-ghidra-project-creator:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && python3 src/run.py"
+    networks:
+      - machinanet
 
 #  contenturianalysis:
 #    depends_on:
@@ -318,7 +306,6 @@ services:
 
 volumes:
   neo4j-data:
-  # orientdb-data:
 
 networks:
     machinanet:
