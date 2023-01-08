@@ -2,17 +2,45 @@
 
 ## prepare to cut a release
 
-Create a versioned tag
+order matters:
+
+0. set a tag version
 
 ```bash
-git submodule foreach git tag -a v0.2 -m "v0.2"
+export TAG=v1.0
 ```
 
-Push the tags
+1. tag and push base:
 
 ```bash
-git submodule foreach git push origin v0.2
+pushd .
+cd images/machina-base &&\
+  git tag -a $TAG -m "$TAG"
+  git push origin $TAG
+popd
 ```
+
+Once image(s) are created, continue
+
+2. tag and push ghidra base
+
+```bash
+pushd .
+cd images/machina-base-ghidra &&\
+  git tag -a $TAG -m "$TAG"
+  git push origin $TAG
+popd
+```
+
+Once image is created, continue
+
+3. tag and push worker modules
+
+```bash
+git submodule foreach git tag -a $TAG -m "$TAG" && \
+  git submodule foreach git push origin $TAG
+```
+
 
 ## ssh push
 
