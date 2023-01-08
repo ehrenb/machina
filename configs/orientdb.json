@@ -1,7 +1,0 @@
-{
-    "orientdb_host": "orientdb",
-    "orientdb_port": 2424,
-    "orientdb_user": "root",
-    "orientdb_pass": "root",
-    "orientdb_name": "machina"
-}

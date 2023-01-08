@@ -12,15 +12,21 @@ services:
     networks:
       - machinanet
 
-  orientdb:
-    image: orientdb:3.2
+  neo4j:
+    image: neo4j:4.1-community #neo4j:5.3.0-community
     ports:
-      - 2424:2424
-      - 2480:2480
-    environment:
-      ORIENTDB_ROOT_PASSWORD: "root"
+      - 7474:7474
+      - 7687:7687
     volumes:
-      - orientdb-data:/orientdb/databases
+      - neo4j-data:/data
+    environment: 
+      - NEO4J_AUTH=neo4j/tXOCq81bn7QfGTMJMrkQqP4J1
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_dbms_default__database=machina
+      # Raise memory limits
+      - NEO4J_dbms_memory_pagecache_size=4G
+      - NEO4J_dbms_memory_heap_initial__size=4G
+      - NEO4J_dbms_memory_heap_max__size=4G
     networks:
       - machinanet
 
@@ -70,7 +76,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -84,7 +90,7 @@ services:
     volumes:
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 orientdb:2424 && python3 src/run.py"
+      bash -c "./wait-for-it.sh -t 60 neo4j:7687 && python3 src/run.py && tail -f /dev/null"
     networks:
       - machinanet
 
@@ -99,7 +105,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -115,7 +121,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -131,7 +137,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -147,7 +153,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -163,7 +169,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -179,7 +185,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -195,7 +201,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -211,7 +217,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -227,7 +233,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -237,13 +243,13 @@ services:
       - base-ubuntu
       - initializer
     build:
-      context: ./images/machina-ssdeep
+      context: ./images/machina-similarity
     image: behren/machina-similarity:latest
     volumes:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -259,7 +265,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -275,7 +281,7 @@ services:
       - ./data:/data
       - ./configs:/configs
     command:
-      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
         && python3 src/run.py"
     networks:
       - machinanet
@@ -292,14 +298,14 @@ services:
 #      - ./configs:/configs
 #      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon. Maybe in the future, this could be removed by having a pool of standby emulators in containers
 #    command:
-#      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 orientdb:2424
+#      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
 #        && python3 images/machina-tar/src/run.py"
 #    networks:
 #      - machinanet
 
 
 volumes:
-  orientdb-data:
+  neo4j-data:
 
 networks:
     machinanet:

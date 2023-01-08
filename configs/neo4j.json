@@ -1,0 +1,7 @@
+{
+    "host": "neo4j",
+    "port": 7687,
+    "user": "neo4j",
+    "pass": "tXOCq81bn7QfGTMJMrkQqP4J1",
+    "db_name": "machina"
+}
