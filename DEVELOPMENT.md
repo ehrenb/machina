@@ -15,10 +15,12 @@ export TAG=v1.0
 ```bash
 pushd .
 cd images/machina-base &&\
-  git tag -a $TAG -m "$TAG"
+  git tag -a $TAG -m "$TAG" &&|
   git push origin $TAG
 popd
 ```
+
+Make release in GH UI
 
 Once image(s) are created, continue
 
@@ -27,19 +29,24 @@ Once image(s) are created, continue
 ```bash
 pushd .
 cd images/machina-base-ghidra &&\
-  git tag -a $TAG -m "$TAG"
+  git tag -a $TAG -m "$TAG" &&|
   git push origin $TAG
 popd
 ```
+
+Make release in GH UI
 
 Once image is created, continue
 
 3. tag and push worker modules
 
 ```bash
-git submodule foreach git tag -a $TAG -m "$TAG" && \
-  git submodule foreach git push origin $TAG
+git submodule foreach git tag -f -a $TAG -m "$TAG"  &&\
+git submodule foreach git push -f origin $TAG
 ```
+
+Make releases in GH UI
+
 
 
 ## ssh push
