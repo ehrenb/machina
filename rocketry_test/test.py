@@ -1,4 +1,4 @@
-from base import Base
+from example import Example
 
-b = Base()
-b.start()
+e = Example()
+e.start()
