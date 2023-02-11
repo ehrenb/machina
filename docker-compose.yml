@@ -286,24 +286,6 @@ services:
     networks:
       - machinanet
 
-#  contenturianalysis:
-#    depends_on:
-#      - base-alpine
-#      - initializer
-#    build:
-#      context: ./images/machina-content-uri-analysis
-#    image: behren/machina-contenturianalysis:latest
-#    volumes:
-#      - ./data:/data
-#      - ./configs:/configs
-#      - /var/run/docker.sock:/var/run/docker.sock # This worker requires the ability to reach the host docker daemon. Maybe in the future, this could be removed by having a pool of standby emulators in containers
-#    command:
-#      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-#        && python3 images/machina-tar/src/run.py"
-#    networks:
-#      - machinanet
-
-
 volumes:
   neo4j-data:
 

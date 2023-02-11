@@ -1,4 +1,5 @@
 {
+  "interval": "hourly",
   "ssdeep_threshold": 60,
   "comparison_type_rules": {
     "*": ["*"]
