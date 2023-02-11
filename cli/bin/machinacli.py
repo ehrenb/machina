@@ -27,7 +27,6 @@ def submit(args):
         channel.basic_publish(exchange='',
             routing_key='Identifier',
             body=data)
-        channel.close()
 
     num_submission = len(args.submissions)
     for idx, s in enumerate(args.submissions):
@@ -37,6 +36,8 @@ def submit(args):
             data = json.dumps(data)
             submit_job(data, channel)
             logger.info(f"Submitted {idx+1}/{num_submission}")
+            
+    channel.close()
 #-------------------------------------------------------------------------------
 if __name__ == '__main__':
     #-------------------------------------------------------------------------------
