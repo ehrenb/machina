@@ -63,7 +63,7 @@ services:
       context: ./images/machina-docs
       dockerfile: Dockerfile
     image: behren/machina-docs:latest
-    command: bash -c "caddy run --config /machina/Caddyfile.dev"
+    command: bash -c "caddy run --config /docs/Caddyfile.dev"
 
   identifier:
     depends_on:
