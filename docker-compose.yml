@@ -13,7 +13,7 @@ services:
       - machinanet
 
   neo4j:
-    image: neo4j:4.1-community #neo4j:5.3.0-community
+    image: neo4j:5.15-community #neo4j:5.3.0-community
     ports:
       - 7474:7474
       - 7687:7687
@@ -22,11 +22,11 @@ services:
     environment: 
       - NEO4J_AUTH=neo4j/tXOCq81bn7QfGTMJMrkQqP4J1
       - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
-      - NEO4J_dbms_default__database=machina
+      - NEO4J_initial_dbms_default__database=machina
       # Raise memory limits
-      - NEO4J_dbms_memory_pagecache_size=4G
-      - NEO4J_dbms_memory_heap_initial__size=4G
-      - NEO4J_dbms_memory_heap_max__size=4G
+      - NEO4J_server_memory_pagecache_size=4G
+      - NEO4J_server_memory_heap_initial__size=4G
+      - NEO4J_server_memory_heap_max__size=4G
     networks:
       - machinanet
 
