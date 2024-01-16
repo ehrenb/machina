@@ -58,7 +58,7 @@ services:
       - base-alpine
     ports: 
       - 80:80
-      - 2019:2019
+      # - 2019:2019 # debug admin port
     build:
       context: ./images/machina-docs
       dockerfile: Dockerfile
