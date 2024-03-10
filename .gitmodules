@@ -55,3 +55,6 @@
 [submodule "images/machina-test"]
 	path = images/machina-test
 	url = https://github.com/ehrenb/machina-test.git
+[submodule "images/machina-clamav"]
+	path = images/machina-clamav
+	url = https://github.com/ehrenb/machina-clamav.git

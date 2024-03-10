@@ -1,5 +1,24 @@
 # development
 
+## creating a new repository
+
+1. Create GH project
+2. Add submodule to `machina/images`
+  * use https clone link option when adding to allow for anonymous cloning
+
+```bash
+git submodule add https://github.com/ehrenb/<REPO>.git
+git commit -m <MSG>
+git push
+```
+
+2. Add GH Repository Secrets, `DOCKER_USERNAME` and `DOCKER_PASSWORD` for Actions
+  * Settings -> Secrets and Variables -> Actions
+3. Create Publish GH workflow
+  * Actions -> "Skip this and set up a workflow yourself" -> name `docker-image.yml`
+  * Populate using any of the other `docker-image.yml` files (except for machina-docs, which publishes on tag AND main commit)
+4. Create Docker Hub project, named after `<REPO>`
+
 ## prepare to cut a release
 
 ```bash
