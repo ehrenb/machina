@@ -13,7 +13,7 @@ services:
       - machinanet
 
   neo4j:
-    image: neo4j:5.15-community #neo4j:5.3.0-community
+    image: neo4j:5.17-community #neo4j:5.3.0-community
     ports:
       - 7474:7474
       - 7687:7687
