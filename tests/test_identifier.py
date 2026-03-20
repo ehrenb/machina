@@ -6,7 +6,7 @@ import pathlib
 import time
 import unittest
 
-from machina.core.models import Artifact, JFFS2, JPEG
+from machina.core.models import Artifact, HTML, JFFS2, JPEG
 from tests.common import db_set_config, get_rmq_conn, test_data_dir
 
 logging.basicConfig()
@@ -104,9 +104,43 @@ class TestIdentifier(unittest.TestCase):
 
             self.assertIsNotNone(new_jffs2_node)
 
-    # def test_resolve_via_mime_type(self):
-    #     """test that type is et using mime type magic"""
-    #     pass
+    def test_resolve_via_mime_type(self):
+        """test that type is set using mime type magic"""
+        MAX_RETRIES = 5
+
+        html_file = pathlib.Path(
+            test_data_dir,
+            'test_identifier',
+            'test_resolve_via_mime_type',
+            'test.html').resolve()
+
+        with open(html_file, 'rb') as f:
+            logger.info(f'Submitting {html_file}')
+            data = f.read()
+            md5 = hashlib.md5(data).hexdigest()
+            data_encoded = base64.b64encode(data).decode()
+
+            data = json.dumps({
+                'data': data_encoded
+            })
+
+            self.channel.basic_publish(
+                exchange='',
+                routing_key='Identifier',
+                body=data
+            )
+
+            for _ in range(MAX_RETRIES):
+                new_html_node = HTML.nodes.get_or_none(md5=md5)
+                if not new_html_node:
+                    time.sleep(2)
+                    logger.info(f"Checking for HTML Node with md5={md5} in db...")
+                    continue
+                else:
+                    logger.info(f"Found md5={md5}")
+                    break
+
+            self.assertIsNotNone(new_html_node)
 
     def test_unresolved_type(self):
         """test unresolved type, should be set to node type
