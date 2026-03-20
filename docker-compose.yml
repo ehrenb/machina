@@ -1,4 +1,3 @@
-version: '3'
 services:
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -13,7 +12,7 @@ services:
       - machinanet
 
   neo4j:
-    image: neo4j:5.17-community #neo4j:5.3.0-community
+    image: neo4j:5.26-community #neo4j:5.3.0-community
     ports:
       - 7474:7474
       - 7687:7687
@@ -286,8 +285,28 @@ services:
     networks:
       - machinanet
 
+  clamav:
+    depends_on:
+      - base-ubuntu
+      - initializer
+    build:
+      context: ./images/machina-clamav
+    image: behren/machina-clamav:latest
+    volumes:
+      - ./data:/data
+      - ./configs:/configs
+      - ./configs/workers/clamav/clamd.conf:/etc/clamav/clamd.conf:ro
+      - ./configs/workers/clamav/freshclam.conf:/etc/clamav/freshclam.conf:ro
+      - clamav_db:/var/lib/clamav             # TODO test this to see what happens with scaled instances
+    command:
+      bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
+        && freshclam -d && clamd && python3 src/run.py"
+    networks:
+      - machinanet
+
 volumes:
   neo4j-data:
+  clamav_db:
 
 networks:
     machinanet:
