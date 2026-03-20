@@ -27,7 +27,8 @@
         "tiff",
         "url",
         "word",
-        "zip"
+        "zip",
+        "gif"
     ],
     "mimes": {
         "application/x-dosexec":"pe",
@@ -53,7 +54,8 @@
         "application/x-tar": "tar",
         "application/vnd.android.package-archive": "apk",
         "application/x-bzip2": "bz2",
-        "image/tiff": "tiff"
+        "image/tiff": "tiff",
+        "image/gif": "gif"
     },
     "detailed_types": {
         "MIME entity, ISO-8859 text, with CRLF line terminators": "word",
@@ -75,6 +77,7 @@
         "ASCII cpio archive": "cpio",
         "LZMA compressed data": "lzma",
         "bzip2 compressed data": "bz2",
-        "TIFF image data": "tiff"
+        "TIFF image data": "tiff",
+        "GIF image data": "gif"
     }
 }

@@ -6,6 +6,8 @@ import pathlib
 import time
 import unittest
 
+from neomodel import db
+
 from machina.core.models import Artifact, HTML, JFFS2, JPEG
 from tests.common import db_set_config, get_rmq_conn, test_data_dir
 
@@ -34,6 +36,7 @@ class TestIdentifier(unittest.TestCase):
             'test_provided_type',
             'google.png').resolve()
 
+        new_jpeg_node = None
         with open(png_file, 'rb') as f:
             logger.info(f'Submitting {png_file}')
             png_data = f.read()
@@ -62,7 +65,11 @@ class TestIdentifier(unittest.TestCase):
                     logger.info(f"Found md5={png_md5}")
                     break
 
+        try:
             self.assertIsNotNone(new_jpeg_node)
+        finally:
+            if new_jpeg_node:
+                new_jpeg_node.delete()
 
     def test_resolve_via_detailed_type(self):
         """test that type is set using detailed type magic"""
@@ -74,6 +81,7 @@ class TestIdentifier(unittest.TestCase):
             'test_resolve_via_detailed_type',
             'firmware.jffs2').resolve()
 
+        new_jffs2_node = None
         with open(jffs2_file, 'rb') as f:
             logger.info(f'Submitting {jffs2_file}')
             data = f.read()
@@ -102,7 +110,11 @@ class TestIdentifier(unittest.TestCase):
                     logger.info(f"Found md5={md5}")
                     break
 
+        try:
             self.assertIsNotNone(new_jffs2_node)
+        finally:
+            if new_jffs2_node:
+                new_jffs2_node.delete()
 
     def test_resolve_via_mime_type(self):
         """test that type is set using mime type magic"""
@@ -114,6 +126,7 @@ class TestIdentifier(unittest.TestCase):
             'test_resolve_via_mime_type',
             'test.html').resolve()
 
+        new_html_node = None
         with open(html_file, 'rb') as f:
             logger.info(f'Submitting {html_file}')
             data = f.read()
@@ -140,7 +153,101 @@ class TestIdentifier(unittest.TestCase):
                     logger.info(f"Found md5={md5}")
                     break
 
+        try:
             self.assertIsNotNone(new_html_node)
+        finally:
+            if new_html_node:
+                new_html_node.delete()
+
+    def test_origin_extraction(self):
+        """test that an extraction relationship is created when origin is provided with a different md5"""
+        MAX_RETRIES = 5
+
+        # Submit the origin file first
+        origin_file = pathlib.Path(
+            test_data_dir,
+            'test_identifier',
+            'test_unresolved_type',
+            'artifact.txt').resolve()
+
+        with open(origin_file, 'rb') as f:
+            logger.info(f'Submitting origin {origin_file}')
+            origin_data = f.read()
+            origin_md5 = hashlib.md5(origin_data).hexdigest()
+            origin_encoded = base64.b64encode(origin_data).decode()
+
+            self.channel.basic_publish(
+                exchange='',
+                routing_key='Identifier',
+                body=json.dumps({'data': origin_encoded})
+            )
+
+        origin_node = None
+        for _ in range(MAX_RETRIES):
+            origin_node = Artifact.nodes.get_or_none(md5=origin_md5)
+            if not origin_node:
+                time.sleep(2)
+                logger.info(f"Checking for origin Artifact Node with md5={origin_md5} in db...")
+                continue
+            else:
+                logger.info(f"Found origin md5={origin_md5}")
+                break
+
+        self.assertIsNotNone(origin_node)
+
+        # Submit a different file with origin pointing to the first node
+        extracted_file = pathlib.Path(
+            test_data_dir,
+            'test_identifier',
+            'test_resolve_via_mime_type',
+            'test.html').resolve()
+
+        with open(extracted_file, 'rb') as f:
+            logger.info(f'Submitting extracted {extracted_file}')
+            extracted_data = f.read()
+            extracted_md5 = hashlib.md5(extracted_data).hexdigest()
+            extracted_encoded = base64.b64encode(extracted_data).decode()
+
+            self.channel.basic_publish(
+                exchange='',
+                routing_key='Identifier',
+                body=json.dumps({
+                    'data': extracted_encoded,
+                    'origin': {
+                        'uid': origin_node.uid,
+                        'type': 'artifact',
+                        'md5': origin_node.md5,
+                        'ts': origin_node.ts.strftime("%Y%m%d%H%M%S%f")
+                    }
+                })
+            )
+
+        extracted_node = None
+        for _ in range(MAX_RETRIES):
+            extracted_node = HTML.nodes.get_or_none(md5=extracted_md5)
+            if not extracted_node:
+                time.sleep(2)
+                logger.info(f"Checking for extracted HTML Node with md5={extracted_md5} in db...")
+                continue
+            else:
+                logger.info(f"Found extracted md5={extracted_md5}")
+                break
+
+        try:
+            self.assertIsNotNone(extracted_node)
+            # is_connected() cannot be used here because the extracts relationship
+            # targets the abstract Base class, which has no __label__ attribute.
+            # neomodel's traversal query builder requires a concrete class label,
+            # so a raw Cypher query is used instead.
+            results, _ = db.cypher_query(
+                "MATCH (a)-[:EXTRACTS]->(b) WHERE a.uid = $origin_uid AND b.uid = $extracted_uid RETURN count(b) > 0",
+                {'origin_uid': origin_node.uid, 'extracted_uid': extracted_node.uid})
+            self.assertTrue(results[0][0])
+        finally:
+            if extracted_node:
+                extracted_node.delete()
+            if origin_node:
+                origin_node.delete()
 
     def test_unresolved_type(self):
         """test unresolved type, should be set to node type
@@ -154,6 +261,7 @@ class TestIdentifier(unittest.TestCase):
             'test_unresolved_type',
             'artifact.txt').resolve()
 
+        new_artifact_node = None
         with open(txt_file, 'rb') as f:
             logger.info(f'Submitting {txt_file}')
             txt_data = f.read()
@@ -182,4 +290,8 @@ class TestIdentifier(unittest.TestCase):
                     logger.info(f"Found md5={txt_md5}")
                     break
 
+        try:
             self.assertIsNotNone(new_artifact_node)
+        finally:
+            if new_artifact_node:
+                new_artifact_node.delete()
