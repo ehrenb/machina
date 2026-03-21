@@ -232,6 +232,8 @@ class TestIdentifier(unittest.TestCase):
             else:
                 logger.info(f"Found extracted md5={extracted_md5}")
                 break
+        
+        time.sleep(1)
 
         try:
             self.assertIsNotNone(extracted_node)
@@ -246,6 +248,89 @@ class TestIdentifier(unittest.TestCase):
         finally:
             if extracted_node:
                 extracted_node.delete()
+            if origin_node:
+                origin_node.delete()
+
+    def test_origin_retype(self):
+        """test that a retype relationship is created when origin is provided with the same md5"""
+        MAX_RETRIES = 5
+
+        jffs2_file = pathlib.Path(
+            test_data_dir,
+            'test_identifier',
+            'test_resolve_via_detailed_type',
+            'firmware.jffs2').resolve()
+
+        with open(jffs2_file, 'rb') as f:
+            data = f.read()
+            md5 = hashlib.md5(data).hexdigest()
+            data_encoded = base64.b64encode(data).decode()
+
+        # Submit the file as jffs2 to create the origin node
+        logger.info(f'Submitting origin {jffs2_file}')
+        self.channel.basic_publish(
+            exchange='',
+            routing_key='Identifier',
+            body=json.dumps({'data': data_encoded, 'type': 'jffs2'})
+        )
+
+        origin_node = None
+        for _ in range(MAX_RETRIES):
+            origin_node = JFFS2.nodes.get_or_none(md5=md5)
+            if not origin_node:
+                time.sleep(2)
+                logger.info(f"Checking for origin JFFS2 Node with md5={md5} in db...")
+                continue
+            else:
+                logger.info(f"Found origin md5={md5}")
+                break
+
+        self.assertIsNotNone(origin_node)
+
+        # Submit the same file with a different type and origin pointing to the first node.
+        # Matching md5 triggers the retype branch.
+        logger.info(f'Submitting retype {jffs2_file}')
+        self.channel.basic_publish(
+            exchange='',
+            routing_key='Identifier',
+            body=json.dumps({
+                'data': data_encoded,
+                'type': 'artifact',
+                'origin': {
+                    'uid': origin_node.uid,
+                    'type': 'jffs2',
+                    'md5': origin_node.md5,
+                    'ts': origin_node.ts.strftime("%Y%m%d%H%M%S%f")
+                }
+            })
+        )
+
+        retyped_node = None
+        for _ in range(MAX_RETRIES):
+            retyped_node = Artifact.nodes.get_or_none(md5=md5)
+            if not retyped_node:
+                time.sleep(2)
+                logger.info(f"Checking for retyped Artifact Node with md5={md5} in db...")
+                continue
+            else:
+                logger.info(f"Found retyped md5={md5}")
+                break
+
+        time.sleep(1)
+
+        try:
+            self.assertIsNotNone(retyped_node)
+            # is_connected() cannot be used here because the retyped relationship
+            # targets the abstract Base class, which has no __label__ attribute.
+            # neomodel's traversal query builder requires a concrete class label,
+            # so a raw Cypher query is used instead.
+            results, _ = db.cypher_query(
+                "MATCH (a)-[:RETYPED]->(b) WHERE a.uid = $origin_uid AND b.uid = $retyped_uid RETURN count(b) > 0",
+                {'origin_uid': origin_node.uid, 'retyped_uid': retyped_node.uid})
+            self.assertTrue(results[0][0])
+        finally:
+            if retyped_node:
+                retyped_node.delete()
             if origin_node:
                 origin_node.delete()
 

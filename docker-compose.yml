@@ -300,9 +300,12 @@ services:
       - clamav_db:/var/lib/clamav             # TODO test this to see what happens with scaled instances
     command:
       bash -c "./wait-for-it.sh -t 60 rabbitmq:5672 -- ./wait-for-it.sh -t 60 neo4j:7687
-        && freshclam -d && clamd && python3 src/run.py"
+        && freshclam -d --show-progress && clamd && python3 src/run.py"
     networks:
       - machinanet
+
+#       tail -f /dev/null
+
 
 volumes:
   neo4j-data:
